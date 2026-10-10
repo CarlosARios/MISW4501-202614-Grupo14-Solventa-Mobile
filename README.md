@@ -268,6 +268,17 @@ Según la [estrategia de pruebas v1.2](https://github.com/leonelparrales22/MISW4
 
 Regla de integración: ningún cambio entra a `develop` ni a `main` con pruebas fallidas.
 
+### Qué mide el 70 %
+
+La compuerta de Kover se aplica sobre **la lógica**: `ViewModel`, repositorios, mapeadores, casos de uso y utilidades. Quedan fuera de la medición, porque no se prueban con unitarias:
+
+- Las funciones anotadas con `@Composable` y con `@Preview`, el paquete `ui/theme`, `MainActivity` y `SolventaApp`. Esa capa se verifica en `androidTest/` con Compose UI Test.
+- El código que generan Hilt, Room y Compose, y `BuildConfig`.
+
+La consecuencia práctica: **poner lógica dentro de un `@Composable` la saca de la medición**. Es una razón más para que la decisión viva en el `ViewModel`, que es además la convención del repositorio.
+
+Mientras no exista lógica que medir, `koverVerifyDebug` reporta `No sources` y pasa. En cuanto entre la primera clase con lógica sin pruebas, falla: está verificado.
+
 ---
 
 ## 8. Referencias

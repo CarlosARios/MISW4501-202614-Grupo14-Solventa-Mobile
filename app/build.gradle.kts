@@ -89,8 +89,16 @@ kover {
                     "*.ComposableSingletons*",
                     "*_Impl",
                     "*_Impl\$*",
+                    // Capa de interfaz: se verifica con pruebas instrumentadas
+                    // (Compose UI Test y Espresso), no con unitarias.
+                    "co.solventa.movil.ui.theme.*",
+                    "co.solventa.movil.MainActivity",
+                    "co.solventa.movil.SolventaApp",
                 )
-                annotatedBy("androidx.compose.ui.tooling.preview.Preview")
+                annotatedBy(
+                    "androidx.compose.ui.tooling.preview.Preview",
+                    "androidx.compose.runtime.Composable",
+                )
             }
         }
         verify {

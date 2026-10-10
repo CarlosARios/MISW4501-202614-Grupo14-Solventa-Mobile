@@ -1,0 +1,10 @@
+# El wrapper de Gradle es un script de shell. Si llega al agente de Linux con
+# finales de linea de Windows, bash falla con "bad interpreter: /bin/sh^M".
+# Estas reglas fijan el final de linea por archivo y no dependen de la
+# configuracion local de cada quien (core.autocrlf cambia entre maquinas).
+gradlew     text eol=lf
+*.sh        text eol=lf
+
+# Los equivalentes de Windows necesitan lo contrario.
+gradlew.bat text eol=crlf
+*.bat       text eol=crlf
