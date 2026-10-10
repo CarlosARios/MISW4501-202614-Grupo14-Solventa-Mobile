@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    en-US. El idioma predeterminado es es-CO y vive en values/strings.xml.
+    Toda clave nueva debe existir en los dos archivos (OBJ 12).
+    El nombre de la aplicacion no se traduce.
+-->
+<resources>
+</resources>

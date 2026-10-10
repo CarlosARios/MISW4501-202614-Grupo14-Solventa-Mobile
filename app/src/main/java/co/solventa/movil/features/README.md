@@ -1,0 +1,23 @@
+# `features` — un paquete por dominio
+
+Cada dominio corresponde a un microservicio detrás del API Gateway, igual que en el cliente web. Dentro de cada dominio, un paquete por flujo, y dentro de cada flujo las pantallas de Compose con su `ViewModel` y su estado.
+
+Un `features` **no importa de otro** `features`. Si dos flujos necesitan lo mismo, eso vive en `shared` o en `core`.
+
+| Paquete | Flujos | Pantallas del prototipo | Historias |
+|---|---|---|---|
+| `acceso/registro/` | Registro con verificación de identidad (KYC): captura del frente y reverso del documento, confirmación de los datos extraídos, calidad insuficiente, verificando identidad | M1a–M1f (**pendientes en el prototipo**) | HU-M1.1-01 |
+| `acceso/ingreso/` | Bienvenida, inicio de sesión, desbloqueo biométrico, sesión expirada | M0, M2, M2d | HU-M1.1-02 |
+| `inicio/` | Pantalla de inicio con avisos y accesos rápidos | M3 | — |
+| `originacion/polizas/` | Mis pólizas y detalle de la póliza | M4, M5 | — |
+| `originacion/renovaciones/` | Renovación desde la alerta, póliza cancelada por no pago, renovación confirmada | M17, M17b, M17c | M3.2-02 |
+| `siniestros/radicacion/` | Reportar un siniestro y captura de evidencia con la cámara | M11a, M12 | — |
+| `siniestros/seguimiento/` | Mis siniestros, estados vacío y degradado, detalle con línea de tiempo, siniestro paramétrico resuelto, detalle sin conexión | M9, M9b, M9c, M10, M10b, M10c | M2.4-01, M2.4-02, M3.1-01 |
+| `siniestros/asistencias/` | Solicitar asistencia en sitio, ubicación desactivada, sin señal de satélite | M14, M14b, M14c | M2.3-01 |
+| `notificaciones/centro/` | Centro de notificaciones, *push* en pantalla bloqueada, adjuntar soporte pendiente y su confirmación | M15, M15b, M18, M18b, M18c | M3.1-01, M3.2-01, M3.3-01, M3.3-02 |
+| `notificaciones/preferencias/` | Qué notificaciones recibe el asegurado y por qué canal | (desde M19) | M3.3-01 |
+| `auditoria/consentimientos/` | Privacidad y consentimientos del titular, detalle y revocación | M8, M8b | RN-02 |
+| `perfil/` | Perfil del asegurado | M19 | — |
+| `perfil/idioma/` | Cambio de idioma en caliente y formatos de la región | M19b | OBJ 12 |
+
+El prototipo completo está en [`docs/pantallas.md`](../../../../../../docs/pantallas.md).

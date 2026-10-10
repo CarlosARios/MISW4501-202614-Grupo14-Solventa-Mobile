@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    es-CO, idioma predeterminado. La traduccion a en-US va en values-en/strings.xml.
+    Ningun texto literal debe quedar en el codigo de Compose: toda cadena visible
+    entra aqui con la clave <dominio>_<pantalla>_<texto>.
+-->
+<resources>
+    <string name="app_name" translatable="false">Solventa</string>
+</resources>

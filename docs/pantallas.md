@@ -1,0 +1,75 @@
+# Catálogo de pantallas del cliente móvil
+
+Prototipo: [`Solventa — Prototipo S7 — Pantallas`](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas), página **`03 · Móvil`**. Punto de inicio del recorrido: **M0 · Bienvenida**. Segundo punto de inicio: **M15b · Push en pantalla bloqueada**.
+
+Esta tabla es el contrato entre el prototipo y el código: **el paquete de la columna «Paquete» es donde va la pantalla**, y el nombre de la rama es el ID de la columna «Historia». Si una pantalla cambia de paquete, se actualiza esta fila en el mismo *pull request*.
+
+> **Pendiente:** la columna «Frame» usa los identificadores del mapa de navegación. Falta reemplazarla por el enlace directo al `node-id` de cada frame, como hace el cliente web. Son 19 enlaces que hay que copiar desde Figma.
+
+## Identidad y acceso
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M0 | Bienvenida | `features/acceso/ingreso` | — | — | Completa |
+| M1a–M1f | Registro con verificación de identidad: captura del frente, del reverso, confirmación de datos, calidad insuficiente, verificando identidad, resultado | `features/acceso/registro` | **HU-M1.1-01** | **Must** | **Pendiente.** El prototipo no tiene frame del onboarding KYC. Debe añadirse antes de la revisión final de la rúbrica |
+| M2 | Inicio de sesión y desbloqueo biométrico | `features/acceso/ingreso` | **HU-M1.1-02** | **Must** | Completa |
+| M2d | Sesión expirada | `features/acceso/ingreso` | HU-M1.1-02 · HA-S01 | Must | Completa |
+
+## Inicio y pólizas
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M3 | Inicio | `features/inicio` | — | — | Completa |
+| M4 | Mis pólizas | `features/originacion/polizas` | — | — | Completa. La tarjeta AU-2024-093377 · No pago entra a M17b |
+| M5 | Detalle de la póliza | `features/originacion/polizas` | — | — | Completa |
+
+## Siniestros · consulta y seguimiento
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M9 | Mis siniestros | `features/siniestros/seguimiento` | M2.4-01 | Should | Completa. Lista con estados, borrador y «actualizado hoy 14:30 · disponible sin conexión» |
+| M9b | Mis siniestros · sin siniestros | `features/siniestros/seguimiento` | M2.4-02 | Could | Completa (estado vacío) |
+| M9c | Mis siniestros · servicio degradado (caché) | `features/siniestros/seguimiento` | M2.4-02 · HA-L02 | Could | Completa. Es la evidencia visible de la caché de lectura |
+| M10 | Detalle del siniestro · línea de tiempo | `features/siniestros/seguimiento` | M2.4-01 | Should | Completa. Misma línea de tiempo que la web (A8) |
+| M10b | Siniestro paramétrico resuelto automáticamente | `features/siniestros/seguimiento` | M3.1-01 | **Must** | Completa. Parámetro, umbral, valor observado y clave de idempotencia — HA-D02 |
+| M10c | Detalle del siniestro sin conexión | `features/siniestros/seguimiento` | M2.4-02 | Could | Completa |
+| M11a | Reportar un siniestro · paso 1 | `features/siniestros/radicacion` | — | — | Completa |
+| M12 | Cámara | `features/siniestros/radicacion` | — | — | Completa |
+
+## Asistencia en sitio
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M14 | Solicitar asistencia · ubicación enviada y llamada | `features/siniestros/asistencias` | M2.3-01 | Should | Completa. Coordenadas, precisión, línea de atención y estado de la solicitud |
+| M14b | Ubicación o permisos desactivados | `features/siniestros/asistencias` | M2.3-01 | Should | Completa (excepción) |
+| M14c | Sin señal de satélite · la llamada se realiza igual | `features/siniestros/asistencias` | M2.3-01 | Should | Completa (excepción) |
+
+## Notificaciones y renovación
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M15 | Centro de notificaciones | `features/notificaciones/centro` | M3.1-01 · M3.2-01 · M3.3-01 | Must + Should | Completa. Los tres tipos de notificación con su acción |
+| M15b | Push del sistema (pantalla bloqueada) | `features/notificaciones/centro` | M3.1-01 | **Must** | Completa. Segundo punto de inicio del recorrido |
+| M17 | Renovación desde la alerta (datos precargados) | `features/originacion/renovaciones` | M3.2-02 | Could | Completa. Mismas cifras que la web (A4) |
+| M17b | Póliza cancelada por no pago · opciones | `features/originacion/renovaciones` | M3.2-02 · W1.6-02 | Could | Completa. *Solicitar recotización* sale al flujo web (E1) |
+| M17c | Renovación confirmada | `features/originacion/renovaciones` | M3.2-02 | Could | Completa |
+| M18 | Adjuntar soporte pendiente | `features/notificaciones/centro` | M3.3-02 | Could | Completa |
+| M18b | Adjuntar soporte · soportes completos | `features/notificaciones/centro` | M3.3-02 | Could | Completa |
+| M18c | Soportes enviados · radicación reactivada | `features/notificaciones/centro` | M3.3-02 | Could | Completa |
+
+## Perfil, privacidad e idioma
+
+| Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
+|---|---|---|---|---|---|
+| M19 | Perfil | `features/perfil` | — | — | Completa |
+| M19b | Idioma · English (US) | `features/perfil/idioma` | OBJ 12 | — | Completa. Espejo de M10 con formatos de EE. UU. |
+| M8 | Privacidad y consentimientos | `features/auditoria/consentimientos` | RN-02 | — | Completa |
+| M8b | Detalle del consentimiento | `features/auditoria/consentimientos` | RN-02 | — | Completa |
+| — | Preferencias de notificación | `features/notificaciones/preferencias` | M3.3-01 | Should | Entra desde M19 |
+
+## Convenciones del prototipo que el código debe respetar
+
+- Lienzo de referencia **390 × 844**, `minSdk 26`.
+- Los datos de la demostración coinciden con el portal: los cuatro siniestros (SIN-2026-01877, -01655, -01702, -01410), la renovación de AU-2025-118204 y el pago paramétrico de $ 180.000 COP son los mismos en A7/A8/A4 y en M9/M10/M17. **No inventar datos nuevos** en las pruebas de interfaz.
+- En el prototipo, los íconos de filtro y de compartir se usan como atajo para alternar los estados de excepción (M9 → M9b → M9c, M10 → M10c). Eso es un recurso de la demostración: **en el código esos estados dependen de la respuesta del servicio, no de un ícono**.
+- La barra inferior es Inicio (M3) · Pólizas (M4) · Siniestros (M9) · Perfil (M19) y vive en `core/navegacion/`.

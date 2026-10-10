@@ -1,0 +1,27 @@
+# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# El estilo oficial de Kotlin usa cuatro espacios; el resto del repositorio
+# sigue los dos espacios del cliente web.
+[*.{kt,kts}]
+indent_size = 4
+max_line_length = 120
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+[*.{xml,yml,yaml,json}]
+indent_size = 4
+
+[{gradle.properties,gradle/libs.versions.toml}]
+indent_size = 4
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
