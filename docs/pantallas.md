@@ -1,19 +1,32 @@
 # Catálogo de pantallas del cliente móvil
 
-Prototipo: [`Solventa — Prototipo S7 — Pantallas`](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas), página **`03 · Móvil`**. Punto de inicio del recorrido: **M0 · Bienvenida**. Segundo punto de inicio: **M15b · Push en pantalla bloqueada**.
+Prototipo: [`Solventa — Prototipo S7 — Pantallas`](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas), página **`02 · Móvil`**. Punto de inicio del recorrido: **M0 · Bienvenida**. Segundo punto de inicio: **M15b · Push en pantalla bloqueada**.
 
 Esta tabla es el contrato entre el prototipo y el código: **el paquete de la columna «Paquete» es donde va la pantalla**, y el nombre de la rama es el ID de la columna «Historia». Si una pantalla cambia de paquete, se actualiza esta fila en el mismo *pull request*.
 
-> **Pendiente:** la columna «Frame» usa los identificadores del mapa de navegación. Falta reemplazarla por el enlace directo al `node-id` de cada frame, como hace el cliente web. Son 19 enlaces que hay que copiar desde Figma.
+> La columna «Frame» de la sección de identidad enlaza al frame exacto. Las demás secciones todavía usan solo el identificador del mapa de navegación; falta copiar sus `node-id` desde Figma.
 
 ## Identidad y acceso
 
+Las ocho pantallas de esta sección cubren los seis criterios de aceptación de HU-M1.1-01 y los cinco de HU-M1.1-02.
+
 | Frame | Pantalla | Paquete | Historia | Prioridad | Estado del prototipo |
 |---|---|---|---|---|---|
-| M0 | Bienvenida | `features/acceso/ingreso` | — | — | Completa |
-| M1a–M1f | Registro con verificación de identidad: captura del frente, del reverso, confirmación de datos, calidad insuficiente, verificando identidad, resultado | `features/acceso/registro` | **HU-M1.1-01** | **Must** | **Pendiente.** El prototipo no tiene frame del onboarding KYC. Debe añadirse antes de la revisión final de la rúbrica |
-| M2 | Inicio de sesión y desbloqueo biométrico | `features/acceso/ingreso` | **HU-M1.1-02** | **Must** | Completa |
-| M2d | Sesión expirada | `features/acceso/ingreso` | HU-M1.1-02 · HA-S01 | Must | Completa |
+| [M0](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=13-177) | Bienvenida | `features/acceso/ingreso` | — | — | Completa. *Crear mi cuenta* → M1a · *Ya tengo cuenta* → M2a |
+| [M1a](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=18-227) | Captura del documento (frente) | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 1 |
+| [M1b](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=18-324) | Captura del reverso | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 1 |
+| [M1c](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=18-412) | Confirmación de los datos extraídos | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 1 |
+| [M1d](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=22-373) | Verificación exitosa · cuenta activa | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 2. Sale a M3 · Inicio |
+| [M1e](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=22-440) | Verificación no superada | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 3: no revela el motivo técnico y ofrece soporte |
+| [M1f](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=22-520) | Iluminación insuficiente durante la captura | `features/acceso/registro` | **HU-M1.1-01** | **Must** | Completa. Criterio 4 |
+| [M1g](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=1242-3278) | Verificando identidad | `features/acceso/registro` | **HU-M1.1-01** | **Must** | **Creada el 09/10/2026.** Criterio 6, primera mitad: estado en proceso sin bloquear. Avanza sola a los 3 s |
+| [M1h](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=1242-3304) | La verificación tarda · aviso por notificación | `features/acceso/registro` | **HU-M1.1-01** | **Must** | **Creada el 09/10/2026.** Criterio 6, segunda mitad (> 30 s) y criterio 5: la cuenta no queda activa |
+| [M2a](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=13-250) | Inicio de sesión con biometría | `features/acceso/ingreso` | **HU-M1.1-02** | **Must** | Completa |
+| [M2b](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=23-489) | Inicio de sesión con contraseña | `features/acceso/ingreso` | **HU-M1.1-02** | **Must** | Completa. Criterio 4: sin biometría configurada |
+| [M2c](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=23-571) | Biometría no reconocida · tres intentos | `features/acceso/ingreso` | **HU-M1.1-02** | **Must** | Completa. Criterio 3 |
+| [M2d](https://www.figma.com/design/ZBPl5l9oXTPlfiOHrzCM2M/Solventa-%E2%80%94-Prototipo-S7-%E2%80%94-Pantallas?node-id=23-631) | Sesión expirada a los cinco minutos | `features/acceso/ingreso` | HU-M1.1-02 · HA-S01 | Must | Completa. Criterio 5 |
+
+Recorrido del registro: **M0 → M1a → M1b → M1c → M1g →** (3 s) **→ M1d → M3**. Desvíos: M1a → M1f (poca luz) · M1b → M1e (falla) · M1g → M1h (tarda) → M0.
 
 ## Inicio y pólizas
 

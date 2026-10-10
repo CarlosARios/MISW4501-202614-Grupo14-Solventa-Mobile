@@ -1,4 +1,4 @@
-# MISW4501-202614-Grupo14-Solventa-Movil
+# MISW4501-202614-Grupo14-Solventa-Mobile
 
 Cliente móvil de **Solventa** (autoservicio del asegurado en movilidad: pólizas, siniestros, asistencia en sitio, notificaciones y renovación), construido en **Kotlin con Jetpack Compose**. Proyecto Final MISW4501 · Grupo 14 · Universidad de los Andes.
 
@@ -7,19 +7,19 @@ Este repositorio es uno de los cuatro componentes de la solución:
 | Componente | Repositorio | Tecnología |
 |---|---|---|
 | Cliente web | [`…-FrontWeb`](https://github.com/nicolasjaramillocely99/MISW4501-202614-Grupo14-Solventa-FrontWeb) | Angular + TypeScript |
-| **Cliente móvil (este)** | `MISW4501-202614-Grupo14-Solventa-Movil` | Kotlin + Jetpack Compose |
-| Microservicios de negocio | `…-Backend` | Go sobre ECS Fargate |
+| **Cliente móvil (este)** | [`…-Mobile`](https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Mobile) | Kotlin + Jetpack Compose |
+| Microservicios de negocio |[`…-Backend`](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa) | Go sobre ECS Fargate |
 | Infraestructura | `…-Infra` | Terraform sobre AWS |
 
-En el [modelo de componentes](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Arquitectura_final#modelo-de-componentes) este cliente vive en **LAYER 4 · Clientes** y solo habla con **LAYER 3 · Gateway** (Amazon API Gateway) por HTTPS; la identidad la emite **Amazon Cognito** (OIDC). Nunca accede a un microservicio, a una base de datos ni a la mensajería directamente. Ver [`docs/arquitectura.md`](docs/arquitectura.md).
+En el [modelo de componentes](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Arquitectura_final#modelo-de-componentes) el cliente mobile vive en **LAYER 4 · Clientes** y su comunicación es única con **LAYER 3 · Gateway** (Amazon API Gateway) por HTTPS; la identidad será administrada por **Amazon Cognito** (OIDC).
 
-A diferencia del cliente web, **esta aplicación sí consume el servicio de notificaciones**: es el canal al que llegan los eventos por *push*.
+**Esta aplicación consume el servicio de notificaciones.**
 
 ---
 
-## 1. Stack definido por el equipo
+## 1. Stack definido para el usuario móvil. 
 
-Tomado de [Definición de frameworks y ambientes](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/frameworks) y del [sistema de diseño](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Sistema-de-Dise%C3%B1o_Solventa). Las versiones exactas viven en [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
+Las versiones exactas se pueden validar en [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
 | Necesidad | Herramienta | Versión instalada |
 |---|---|---|
@@ -40,19 +40,79 @@ Tomado de [Definición de frameworks y ambientes](https://github.com/leonelparra
 | Integración continua | GitHub Actions (por *pull request*) | — |
 | Dependencias vulnerables | Dependabot | — |
 
-Dispositivos soportados: **`minSdk 26`** (Android 8.0) y `targetSdk 35`. El `compileSdk` es 37 porque `androidx.core:core-ktx:1.19.1` lo exige; eso no cambia el nivel al que la aplicación declara comportarse. Lienzo de referencia del prototipo **390 × 844**. Idiomas: **es-CO** (predeterminado) y **en-US**.
+Dispositivos soportados: **`minSdk 26`** (Android 8.0) y `targetSdk 35`. El `compileSdk` es 37. Lienzo de referencia del prototipo **390 × 844**. Idiomas: **es-CO** (predeterminado) y **en-US**.
 
 ---
 
-## 2. Puesta en marcha
+## 2. How-to
 
-Requisitos: **Android Studio** (el proyecto usa el JDK que trae incluido) y un emulador o dispositivo con **Android 8.0 o superior**.
+### 2.1 Requisitos
 
-En Android Studio: abrir la carpeta, esperar el *sync* de Gradle y ejecutar. Desde la terminal en Windows hay que apuntar `JAVA_HOME` al JDK de Android Studio:
+| Qué | Detalle |
+|---|---|
+| **Android Studio** | Una versión que soporte **AGP 9.4.1**. Si al abrir el proyecto Studio propone *actualizar* el Android Gradle Plugin, **no debe aceptarse**: significa que esa instalación de Studio es anterior a la que el proyecto necesita. La salida es actualizar Studio (*Help → Check for Updates*) |
+| **Git** | Para clonar el repositorio |
+| **JDK** | Ninguno aparte. El proyecto usa el **JBR que viene dentro de Android Studio**. Solo quien compile desde la terminal sin Studio necesita un **JDK 21**, que es el que usa el pipeline |
+| **SDK de Android** | Plataforma **API 37** y las *Android SDK Build-Tools*. No hace falta instalarlos a mano: al abrir el proyecto, Studio detecta lo que falta y ofrece descargarlo |
+| **Dispositivo** | Un emulador o un teléfono con **Android 8.0 (API 26) o superior**. Para el emulador, una imagen de API 35 o 36 es la más parecida a la del pipeline |
+| **Espacio en disco** | Unos 10 GB entre el SDK, el emulador y la caché de Gradle |
+
+No hace falta instalar Gradle: el repositorio trae el *wrapper* (`gradlew`), que descarga la versión correcta la primera vez.
+
+### 2.2 Abrir el proyecto por primera vez
+
+```bash
+git clone https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Mobile.git
+cd MISW4501-202614-Grupo14-Solventa-Mobile
+```
+
+El repositorio es privado: quien vaya a clonarlo necesita acceso de colaborador y una credencial de GitHub configurada —*token* personal o clave SSH—.
+
+1. En Android Studio: **File → Open** y seleccione la **carpeta raíz** del repositorio, la que contiene `settings.gradle.kts`. No use *Import project* ni abra la carpeta `app/`.
+2. Si aparece el aviso de **Trust Project**, acéptelo: sin eso Gradle no se ejecuta.
+3. Espere el *sync* de Gradle. **La primera vez tarda varios minutos**, porque descarga el *wrapper* y todas las dependencias.
+4. Si Studio avisa que falta algo del SDK, acepte la descarga que propone y deje que vuelva a sincronizar.
+5. Cuando el *sync* termine sin errores, seleccione un dispositivo en la barra superior y ejecute **Run** (`Mayús + F10`).
+
+> **El aviso amarillo *«Gradle files have changed since last project sync»*.** Aparece cada vez que alguien modifica `build.gradle.kts`, `libs.versions.toml` o `gradle.properties` — por ejemplo después de un `git pull`. Se resuelve con **Sync Now**, o con **File → Sync Project with Gradle Files** (`Ctrl + Mayús + O`). Compilar sin sincronizar funciona, pero el editor subraya en rojo clases que sí existen, porque su índice quedó viejo.
+
+> **`local.properties` no está en el repositorio** y no debe estarlo: Studio lo genera con la ruta del SDK de cada máquina, que no es la misma para todos.
+
+### 2.3 Compilar desde la terminal
+
+Gradle necesita saber qué JDK usar. Lo más simple es reutilizar el que ya trae Android Studio, sin instalar nada.
+
+**La ruta no es la misma para todos.** Depende del sistema operativo y, en Windows, de cuántas veces se haya instalado Studio: un segundo instalador deja carpetas como `Android Studio1` o `Android Studio 2026.2.1`. Por eso conviene detectarla en vez de escribirla.
+
+**Windows (PowerShell)** — detecta la carpeta, la asigna y comprueba que sirve:
 
 ```powershell
-$env:JAVA_HOME = "C:\Program Files\Android\Android Studio1\jbr"
+$studio = Get-ChildItem "C:\Program Files\Android", "$env:LOCALAPPDATA\Programs" -Directory -Filter "Android Studio*" -ErrorAction SilentlyContinue | Where-Object { Test-Path "$($_.FullName)\jbr\bin\java.exe" } | Select-Object -First 1
+$env:JAVA_HOME = Join-Path $studio.FullName "jbr"
+& "$env:JAVA_HOME\bin\java.exe" -version
 ```
+
+**macOS y Linux (bash o zsh)**:
+
+```bash
+for d in "/Applications/Android Studio.app/Contents/jbr/Contents/Home" "$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home" /opt/android-studio/jbr "$HOME/android-studio/jbr"; do
+  [ -x "$d/bin/java" ] && export JAVA_HOME="$d" && break
+done
+"$JAVA_HOME/bin/java" -version
+```
+
+Si el bloque no encuentra nada, la ruta exacta está dentro de Studio: **Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK**. Al situar el cursor sobre la entrada, Studio muestra la ruta completa.
+
+Esa asignación **dura solo lo que dure esa terminal**. Para dejarla fija:
+
+- **Windows:** `setx JAVA_HOME "<la ruta>"`. Conviene conocer una trampa del sistema: `setx` escribe la variable en el registro, pero solo la heredan los procesos nuevos **cuyo proceso padre también haya arrancado después**. Cerrar y reabrir la pestaña de la terminal no basta si quien la abre es una aplicación que ya estaba en ejecución; hay que cerrar esa aplicación o cerrar la sesión de Windows.
+- **macOS y Linux:** agregar la línea `export JAVA_HOME=...` a `~/.zshrc` o `~/.bashrc`.
+
+**Alternativa sin Android Studio.** Instalar un **JDK 21** —por ejemplo [Temurin](https://adoptium.net/)— y apuntar `JAVA_HOME` ahí; es exactamente lo que hace el pipeline. En ese caso también hay que resolver el SDK de Android aparte: definir `ANDROID_HOME` o crear un `local.properties` con `sdk.dir=<ruta del SDK>`.
+
+### 2.4 Comandos
+
+En Windows el ejecutable es `.\gradlew.bat`; en macOS y Linux, `./gradlew`.
 
 | Comando | Qué hace |
 |---|---|
@@ -62,11 +122,26 @@ $env:JAVA_HOME = "C:\Program Files\Android\Android Studio1\jbr"
 | `./gradlew testDebugUnitTest` | Pruebas unitarias |
 | `./gradlew koverLogDebug` | Imprime el porcentaje de cobertura |
 | `./gradlew koverHtmlReportDebug` | Reporte navegable de cobertura |
-| `./gradlew testDebugUnitTest koverVerifyDebug` | La compuerta que corre el pipeline |
+| `./gradlew testDebugUnitTest koverVerifyDebug` | **La compuerta que corre el pipeline.** Debe pasar antes de abrir el *pull request* |
 | `./gradlew assembleStaging` | Compila la variante de experimentos |
 | `./gradlew connectedDebugAndroidTest` | Pruebas instrumentadas (requiere emulador encendido) |
 
-El ambiente local apunta a **`http://10.0.2.2:8080`**, que es como el emulador alcanza el `localhost` del PC donde corre el `docker-compose` del repositorio de servicios. Dentro del emulador, `localhost` es el propio dispositivo virtual.
+### 2.5 A qué apunta la aplicación
+
+El ambiente local apunta a **`http://10.0.2.2:8080`**, que es como el emulador alcanza el `localhost` del PC donde corre el `docker-compose` del repositorio de servicios. Dentro del emulador, `localhost` es el propio dispositivo virtual, no la máquina anfitriona.
+
+
+### 2.6 Si algo falla
+
+| Síntoma | Causa y salida |
+|---|---|
+| `ERROR: JAVA_HOME is set to an invalid directory` | La ruta no contiene `bin/java`. Conviene usar el bloque de detección de 2.3 en lugar de escribirla a mano |
+| `SDK location not found` | Falta `local.properties`. Se genera al abrir el proyecto una vez en Studio, o se crea a mano con `sdk.dir=<ruta>` |
+| Studio propone *Upgrade Android Gradle Plugin* | Esa instalación de Studio es anterior al AGP del proyecto. Hay que actualizar Studio, **no** el AGP |
+| `Dependency requires compileSdk 38` (o superior) tras actualizar una librería | Subir `compileSdk` en `app/build.gradle.kts`. Eso no cambia `targetSdk`, que sigue en 35 por decisión del equipo |
+| El editor subraya en rojo clases que sí existen | Falta sincronizar: `Ctrl + Mayús + O` |
+| `Using kotlin.sourceSets DSL is not allowed with built-in Kotlin` | Falta `android.disallowKotlinSourceSets=false` en `gradle.properties`. AGP 9 trae Kotlin integrado y KSP todavía registra sus fuentes por la vía antigua |
+| El build se cuelga o falla sin razón clara | `./gradlew --stop` y compilar de nuevo; si persiste, `./gradlew clean` |
 
 ---
 
@@ -116,14 +191,14 @@ Cada carpeta principal tiene un `README.md` que explica qué va en ella y cómo 
 
 ---
 
-## 4. Tomé una historia de usuario: ¿a qué paquete voy?
+## 4. Dónde ubicar la historia de usuario móvil asignada? :
 
-1. Abre [`docs/pantallas.md`](docs/pantallas.md) y busca el ID de la historia (`HU-M1.1-01`, `M2.4-01`, …). La tabla indica el **paquete**, el **frame de Figma** y la prioridad.
-2. Crea la rama desde `develop` con el ID de la historia como único nombre: `HU-M1.1-01`.
-3. Trabaja dentro de `features/<dominio>/<flujo>/`. El `README.md` de `features` lista sus pantallas y sus historias.
+1. Buscar el ID de la historia (`HU-M1.1-01`, `M2.4-01`, …) en [`docs/pantallas.md`](docs/pantallas.md). La tabla indica el **paquete**, el **frame de Figma** y la prioridad.
+2. Crear la rama desde `develop` con el ID de la historia como único nombre: `HU-M1.1-01`.
+3. Trabajar dentro de `features/<dominio>/<flujo>/`. El `README.md` de `features` lista sus pantallas y sus historias.
 4. Las llamadas HTTP salen siempre por el cliente del microservicio en `core/api/<servicio>/`. Si la historia necesita un componente visual reutilizable, va en `shared/ui/`.
 5. Los textos van en `res/values/strings.xml` y `res/values-en/strings.xml`; los colores y la tipografía salen de `ui/theme/`.
-6. Antes del *pull request*: `./gradlew lintDebug assembleDebug testDebugUnitTest koverVerifyDebug` en verde, con cobertura ≥ 70 % en lo que tocaste.
+6. Antes del *pull request*: `./gradlew lintDebug assembleDebug testDebugUnitTest koverVerifyDebug` en verde, con cobertura ≥ 70 % sobre lo modificado.
 
 Correspondencia dominio ↔ microservicio ↔ épica:
 

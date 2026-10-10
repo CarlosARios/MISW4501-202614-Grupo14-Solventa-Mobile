@@ -6,8 +6,8 @@ Un `features` **no importa de otro** `features`. Si dos flujos necesitan lo mism
 
 | Paquete | Flujos | Pantallas del prototipo | Historias |
 |---|---|---|---|
-| `acceso/registro/` | Registro con verificación de identidad (KYC): captura del frente y reverso del documento, confirmación de los datos extraídos, calidad insuficiente, verificando identidad | M1a–M1f (**pendientes en el prototipo**) | HU-M1.1-01 |
-| `acceso/ingreso/` | Bienvenida, inicio de sesión, desbloqueo biométrico, sesión expirada | M0, M2, M2d | HU-M1.1-02 |
+| `acceso/registro/` | Registro con verificación de identidad (KYC): captura del frente y del reverso, confirmación de los datos extraídos, iluminación insuficiente, verificando identidad, resultado y aviso por notificación | M1a–M1h | HU-M1.1-01 |
+| `acceso/ingreso/` | Bienvenida, inicio de sesión con biometría o contraseña, tres intentos, sesión expirada | M0, M2a–M2d | HU-M1.1-02 |
 | `inicio/` | Pantalla de inicio con avisos y accesos rápidos | M3 | — |
 | `originacion/polizas/` | Mis pólizas y detalle de la póliza | M4, M5 | — |
 | `originacion/renovaciones/` | Renovación desde la alerta, póliza cancelada por no pago, renovación confirmada | M17, M17b, M17c | M3.2-02 |

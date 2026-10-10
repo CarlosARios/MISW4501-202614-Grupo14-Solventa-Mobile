@@ -31,8 +31,8 @@ El alcance es el paquete de `features`, no la capa: `feat(acceso)`, no `feat(vie
 
 ## Pull requests
 
-1. Actualiza la rama con `develop` antes de abrirlo.
-2. El *pull request* apunta a `develop`. Completa la plantilla (`.github/PULL_REQUEST_TEMPLATE.md`): historia, pantallas de Figma, cómo probarlo.
+1. Actualizar la rama con `develop` antes de abrirlo.
+2. El *pull request* apunta a `develop`. Se diligencia la plantilla (`.github/PULL_REQUEST_TEMPLATE.md`): historia, pantallas de Figma y cómo probarlo.
 3. Revisión de al menos un compañero.
 4. Pipeline `CI · Cliente móvil` en verde: Android Lint, *build* de depuración y pruebas unitarias con cobertura ≥ 70 %.
 5. *Squash and merge* a `develop`; la rama de la historia se borra al integrar.
@@ -70,8 +70,4 @@ El alcance es el paquete de `features`, no la capa: `feat(acceso)`, no `feat(vie
 ./gradlew testDebugUnitTest koverVerifyDebug # la compuerta que corre el pipeline
 ```
 
-Para compilar desde la terminal en Windows hay que apuntar `JAVA_HOME` al JDK que trae Android Studio:
-
-```powershell
-$env:JAVA_HOME = "C:\Program Files\Android\Android Studio1\jbr"
-```
+Para compilar desde la terminal hay que apuntar `JAVA_HOME` al JDK que trae Android Studio. La ruta cambia según el sistema operativo y según cuántas veces se haya instalado Studio, así que conviene detectarla: el bloque para cada sistema está en el [README, sección 2.3](../README.md#23-compilar-desde-la-terminal).
