@@ -1,0 +1,57 @@
+package co.solventa.movil.core.navegacion
+
+import kotlinx.serialization.Serializable
+
+/**
+ * Destinos de navegación. Una ruta por pantalla del prototipo, **no** por
+ * variante: M1f (iluminación insuficiente) es un estado de M1a, y M2b y M2c
+ * son estados de M2a. Las variantes se resuelven dentro del mismo composable.
+ *
+ * Ninguna pantalla escribe una cadena de ruta: se navega con estos objetos.
+ */
+sealed interface Ruta {
+
+    /** M0 · Bienvenida. Punto de inicio de la aplicación sin sesión. */
+    @Serializable
+    data object Bienvenida : Ruta
+
+    /** Grafo del registro con verificación de identidad (HU-M1.1-01). */
+    @Serializable
+    data object Registro : Ruta
+
+    /** M1a · Captura del frente. Incluye el estado M1f, poca iluminación. */
+    @Serializable
+    data object CapturaFrente : Ruta
+
+    /** M1b · Captura del reverso. */
+    @Serializable
+    data object CapturaReverso : Ruta
+
+    /** M1c · Confirmación de los datos extraídos del documento. */
+    @Serializable
+    data object ConfirmacionDatos : Ruta
+
+    /** M1g · Verificando identidad. */
+    @Serializable
+    data object Verificando : Ruta
+
+    /** M1d · Verificación exitosa, cuenta activa. */
+    @Serializable
+    data object VerificacionExitosa : Ruta
+
+    /** M1e · Verificación no superada. */
+    @Serializable
+    data object VerificacionNoSuperada : Ruta
+
+    /** M1h · La verificación tarda; el resultado llega por notificación. */
+    @Serializable
+    data object VerificacionDemorada : Ruta
+
+    /** M2a · Ingreso. Incluye M2b (contraseña) y M2c (tres intentos). */
+    @Serializable
+    data object Ingreso : Ruta
+
+    /** M3 · Inicio. Primera pantalla con sesión activa. */
+    @Serializable
+    data object Inicio : Ruta
+}

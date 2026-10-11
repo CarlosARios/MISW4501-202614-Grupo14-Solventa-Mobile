@@ -17,7 +17,7 @@ Equivale a `src/app/core` del [cliente web](https://github.com/nicolasjaramilloc
 | `persistencia/` | Base de datos Room: borradores del registro KYC, cola de evidencias y caché de lectura para el modo sin conexión | HA-L02 y el ADR de caché de lectura. El esquema se exporta a `app/schemas` |
 | `sincronizacion/` | *Workers* de WorkManager que vacían la cola cuando vuelve la conexión | Pantallas M9c y M10c (degradado y sin conexión) son su evidencia visible |
 | `i18n/` | Idioma activo (es-CO y en-US) y formateo de moneda, fecha y número con `NumberFormat` y `DateTimeFormatter` sobre el `Locale` | OBJ 12 · soporte multimoneda (COP, MXN, CLP, PEN) |
-| `navegacion/` | Rutas de la aplicación, el `NavHost` y la barra inferior (Inicio · Pólizas · Siniestros · Perfil) | Mapa de navegación móvil |
+| `navegacion/` | El contrato de rutas (`Ruta`) y la barra inferior (Inicio · Pólizas · Siniestros · Perfil). **El `NavHost` no vive aquí**: es la raíz de composición, conoce todos los dominios y `core` no puede importar de `features`, así que está en el paquete raíz como `SolventaNavHost` | Mapa de navegación móvil |
 | `errores/` | Manejo uniforme de errores HTTP, identificador de correlación en las peticiones y mensajes al usuario | Observabilidad con trazas correlacionadas · T6 |
 | `di/` | Módulos de Hilt que proveen Retrofit, OkHttp, Room, WorkManager y los clientes de `api/` | La aplicación no construye dependencias a mano |
 

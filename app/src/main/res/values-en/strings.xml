@@ -5,4 +5,100 @@
     El nombre de la aplicacion no se traduce.
 -->
 <resources>
+
+    <!-- Comunes -->
+    <string name="comun_atras">Back</string>
+    <string name="comun_continuar">Continue</string>
+    <string name="comun_entendido">Got it</string>
+    <string name="comun_contactar_soporte">Contact support</string>
+
+    <!-- M0 - welcome -->
+    <string name="bienvenida_titulo">Solventa</string>
+    <string name="bienvenida_lema">Your insurance, with you</string>
+    <string name="bienvenida_crear_cuenta">Create my account</string>
+    <string name="bienvenida_ya_tengo_cuenta">I already have an account</string>
+    <string name="pendiente_pantalla">Screen pending: %1$s</string>
+
+    <!-- M1a and M1b - document capture -->
+    <string name="registro_captura_titulo">Verify your identity</string>
+    <string name="registro_captura_paso">Step 1 of 3 · Identity document</string>
+    <string name="registro_captura_frente_instruccion">Take a photo of the front of your ID</string>
+    <string name="registro_captura_frente_etiqueta">FRONT</string>
+    <string name="registro_captura_frente_ayuda">Place the front of the document inside the frame and hold the phone steady</string>
+    <string name="registro_captura_reverso_instruccion">Take a photo of the back of your ID</string>
+    <string name="registro_captura_reverso_etiqueta">BACK</string>
+    <string name="registro_captura_reverso_ayuda">Now turn the document over and place the back inside the frame</string>
+    <string name="registro_captura_consejo_luz">Find good lighting</string>
+    <string name="registro_captura_consejo_reflejos">Avoid glare and shadows</string>
+    <string name="registro_captura_consejo_nitidez">Full document, in focus</string>
+    <string name="registro_captura_privacidad">We only capture the image of your document to verify your identity. It is not saved to your phone\'s gallery.</string>
+    <string name="registro_captura_accion">Capture</string>
+    <string name="registro_captura_problemas">I\'m having trouble capturing</string>
+    <string name="registro_captura_marco_descripcion">Guide frame for positioning the document</string>
+
+    <!-- M1f - insufficient lighting, a state of M1a -->
+    <string name="registro_calidad_oscura_aviso">The image is too dark</string>
+    <string name="registro_calidad_oscura_titulo">We need more light</string>
+    <string name="registro_calidad_oscura_detalle">The image is too dark to read the document. Move closer to a window or turn on the room light; you can also use the phone\'s flash.</string>
+    <string name="registro_calidad_borrosa_aviso">The image is blurry</string>
+    <string name="registro_calidad_borrosa_titulo">The photo came out blurred</string>
+    <string name="registro_calidad_borrosa_detalle">Rest the phone on a surface or hold it with both hands, and try again without moving the document.</string>
+    <string name="registro_calidad_incompleta_aviso">The document is not fully visible</string>
+    <string name="registro_calidad_incompleta_titulo">Part of the document is missing</string>
+    <string name="registro_calidad_incompleta_detalle">Make sure all four corners of the document are inside the frame before capturing.</string>
+    <string name="registro_calidad_reintentar">Try again</string>
+
+    <!-- M1c - confirm the extracted data -->
+    <string name="registro_datos_titulo">Confirm your details</string>
+    <string name="registro_datos_paso">Step 2 of 3 · Personal details</string>
+    <string name="registro_datos_introduccion">We read these details from your document. Correct anything that does not match before continuing.</string>
+    <string name="registro_datos_nombres">First names</string>
+    <string name="registro_datos_apellidos">Last names</string>
+    <string name="registro_datos_documento">Document</string>
+    <string name="registro_datos_documento_ayuda">Read from the captured document</string>
+    <string name="registro_datos_nacimiento">Date of birth</string>
+    <string name="registro_datos_nacimiento_formato">MM/DD/YYYY</string>
+    <string name="registro_datos_correo">Email address</string>
+    <string name="registro_datos_celular">Mobile number</string>
+    <string name="registro_datos_celular_ayuda">You will receive a verification code by SMS</string>
+    <string name="registro_datos_terminos">I accept Solventa\'s terms of use and personal data processing policy.</string>
+    <string name="registro_datos_accion">Confirm and verify my identity</string>
+
+    <!-- M1g - verifying identity -->
+    <string name="registro_verificando_titulo">Verifying identity</string>
+    <string name="registro_verificacion_paso">Step 3 of 3 · Verification</string>
+    <string name="registro_verificando_encabezado">We are verifying your identity</string>
+    <string name="registro_verificando_detalle">This usually takes less than a minute. Please keep the app open.</string>
+    <string name="registro_verificando_documento">Identity document received and legible</string>
+    <string name="registro_verificando_prueba_vida">Liveness check in progress</string>
+    <string name="registro_verificando_listas">Restricted list screening pending</string>
+    <string name="registro_verificando_avisarme">Notify me instead</string>
+
+    <!-- M1d - verification successful -->
+    <string name="registro_exito_titulo">Verification complete</string>
+    <string name="registro_exito_encabezado">Identity verified</string>
+    <string name="registro_exito_detalle">Your account is now active. We will take you to the home screen in a few seconds.</string>
+    <string name="registro_exito_documento">Identity document legible and valid</string>
+    <string name="registro_exito_prueba_vida">Liveness check passed</string>
+    <string name="registro_exito_listas">No matches on restricted lists</string>
+    <string name="registro_exito_biometria">Use my fingerprint or face to sign in next time</string>
+    <string name="registro_exito_accion">Go to home</string>
+
+    <!-- M1e - verification not passed -->
+    <string name="registro_fallo_titulo">Verification</string>
+    <string name="registro_fallo_encabezado">We could not verify your identity</string>
+    <string name="registro_fallo_detalle">We were unable to validate your identity with the information captured. For security reasons we cannot share the details of this result. You can try again or contact our support team.</string>
+    <string name="registro_fallo_consejo_luz">Find a well-lit place without glare</string>
+    <string name="registro_fallo_consejo_documento">Use your original document, complete and without a sleeve</string>
+    <string name="registro_fallo_consejo_rostro">Look straight at the camera during the liveness check</string>
+    <string name="registro_fallo_referencia">Attempt reference: %1$s</string>
+    <string name="registro_fallo_accion">Try again</string>
+
+    <!-- M1h - verification is taking longer -->
+    <string name="registro_demora_titulo">Verification in progress</string>
+    <string name="registro_demora_encabezado">This is taking longer than usual</string>
+    <string name="registro_demora_detalle">You do not need to wait here. We will send you a notification with the result; it usually arrives within 10 minutes.</string>
+    <string name="registro_demora_documento">Identity document received and legible</string>
+    <string name="registro_demora_en_proceso">Identity verification in progress</string>
+    <string name="registro_demora_cuenta_inactiva">Your account will not be active until verification finishes</string>
 </resources>

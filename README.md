@@ -272,8 +272,14 @@ Regla de integración: ningún cambio entra a `develop` ni a `main` con pruebas 
 
 La compuerta de Kover se aplica sobre **la lógica**: `ViewModel`, repositorios, mapeadores, casos de uso y utilidades. Quedan fuera de la medición, porque no se prueban con unitarias:
 
-- Las funciones anotadas con `@Composable` y con `@Preview`, el paquete `ui/theme`, `MainActivity` y `SolventaApp`. Esa capa se verifica en `androidTest/` con Compose UI Test.
+- La capa de interfaz: las funciones `@Composable` y `@Preview`, los paquetes `ui/theme` y `shared/ui` completos, `MainActivity` y `SolventaApp`. Se verifica en `androidTest/` con Compose UI Test.
+- Los archivos de vistas previas, que terminan en `Preview.kt`. Son herramienta de diseño, no código que corra en el dispositivo.
+- Las declaraciones de rutas (`core/navegacion/Ruta`): objetos sin comportamiento.
 - El código que generan Hilt, Room y Compose, y `BuildConfig`.
+
+Se excluyen **paquetes completos** y no solo las funciones `@Composable` porque un archivo de interfaz deja además constantes, enumeraciones y lambdas sueltas que no son lógica de negocio y empujan la medición hacia abajo sin decir nada útil.
+
+**El grafo de navegación sí se mide**, aunque hoy no tenga pruebas. Es deliberado: ahí viven decisiones de recorrido que pueden fallar, y dejarlas contando es el recordatorio de que faltan sus pruebas instrumentadas.
 
 La consecuencia práctica: **poner lógica dentro de un `@Composable` la saca de la medición**. Es una razón más para que la decisión viva en el `ViewModel`, que es además la convención del repositorio.
 

@@ -82,7 +82,9 @@ kover {
                     "*.Hilt_*",
                     "*_HiltModules*",
                     "*_Factory",
+                    "*_Factory\$*",
                     "*_MembersInjector",
+                    "*_MembersInjector\$*",
                     "*_GeneratedInjector",
                     "hilt_aggregated_deps.*",
                     "dagger.hilt.*",
@@ -90,10 +92,20 @@ kover {
                     "*_Impl",
                     "*_Impl\$*",
                     // Capa de interfaz: se verifica con pruebas instrumentadas
-                    // (Compose UI Test y Espresso), no con unitarias.
+                    // (Compose UI Test y Espresso), no con unitarias. Se
+                    // excluyen los paquetes completos y no solo las funciones
+                    // @Composable, porque un archivo de interfaz deja ademas
+                    // constantes, enumeraciones y lambdas sueltas que no son
+                    // logica de negocio y distorsionan la medicion.
                     "co.solventa.movil.ui.theme.*",
+                    "co.solventa.movil.shared.ui.*",
                     "co.solventa.movil.MainActivity",
                     "co.solventa.movil.SolventaApp",
+                    // Vistas previas: herramienta de diseno, no codigo que corra.
+                    "*PreviewKt",
+                    // Declaraciones de rutas: objetos sin comportamiento.
+                    "co.solventa.movil.core.navegacion.Ruta",
+                    "co.solventa.movil.core.navegacion.Ruta\$*",
                 )
                 annotatedBy(
                     "androidx.compose.ui.tooling.preview.Preview",
