@@ -1,0 +1,63 @@
+name: Publicar APK
+
+# Despliegue continuo del cliente móvil. Al etiquetar un commit —por ejemplo
+# al cierre de un sprint— se publica un Release con el APK adjunto, de modo
+# que el equipo y quien evalúe tengan un enlace permanente para instalar la
+# aplicación sin entrar a buscar artefactos de ejecuciones.
+#
+#   git tag -a v0.1.0 -m "Sprint 1"
+#   git push origin v0.1.0
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    name: Construir y publicar el APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Código fuente
+        uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Verificar antes de publicar
+        run: ./gradlew lintDebug testDebugUnitTest koverVerifyDebug
+
+      - name: Construir el APK
+        run: ./gradlew assembleDebug
+
+      - name: Renombrar con la versión
+        run: |
+          mkdir -p entrega
+          cp app/build/outputs/apk/debug/app-debug.apk \
+             "entrega/solventa-movil-${GITHUB_REF_NAME}.apk"
+
+      - name: Publicar el Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: entrega/*.apk
+          generate_release_notes: true
+          body: |
+            Cliente móvil de Solventa — ${{ github.ref_name }}
+
+            Descarga el APK adjunto e instálalo en un dispositivo o emulador
+            con Android 8.0 (API 26) o superior. Hay que permitir la
+            instalación desde orígenes desconocidos.
+
+            Está firmado con la clave de depuración, no con una de
+            publicación: sirve para probar y evaluar, no para una tienda.
