@@ -1,0 +1,69 @@
+name: Instrumentadas nocturnas
+
+# Pruebas de interfaz con Compose UI Test sobre un emulador. Van aparte del
+# pipeline de cada pull request porque levantar un emulador toma entre 8 y 12
+# minutos: en cada PR eso agotaría la cuota de minutos del repositorio y
+# volvería lenta la revisión. Equivale al `e2e-nocturno.yml` del cliente web.
+#
+# Las ejecuciones programadas solo corren desde la rama predeterminada del
+# repositorio. Si el archivo vive únicamente en una rama de historia, no se
+# dispara: hay que tenerlo en develop.
+
+on:
+  schedule:
+    # 07:00 UTC = 02:00 en Bogotá. Termina antes de que alguien empiece a trabajar.
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: instrumentadas-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  instrumentadas:
+    name: Compose UI Test sobre emulador
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Código fuente
+        uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Sin aceleración por hardware el emulador tarda tanto que el trabajo
+      # expira. El agente de Ubuntu tiene KVM pero no se lo da al usuario
+      # que ejecuta el workflow.
+      - name: Habilitar KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Pruebas instrumentadas
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: ./gradlew :app:connectedDebugAndroidTest
+
+      - name: Reporte de las instrumentadas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: instrumentadas
+          path: |
+            app/build/reports/androidTests/connected/
+            app/build/outputs/androidTest-results/connected/
+          if-no-files-found: ignore

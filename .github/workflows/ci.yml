@@ -37,6 +37,21 @@ jobs:
       - name: Pruebas unitarias con cobertura (umbral ≥ 70 %)
         run: ./gradlew testDebugUnitTest koverXmlReportDebug koverVerifyDebug
 
+      # Despliegue continuo del cliente móvil: una aplicación Android no se
+      # hospeda, se instala. Lo que se "despliega" es el APK, y queda
+      # descargable desde la ejecución apenas el código entra a develop o a
+      # main. Va firmado con la clave de depuración, que es la que genera el
+      # propio agente: suficiente para instalar y probar. La firma de
+      # publicación queda pendiente de una clave en los secretos.
+      - name: APK instalable
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: solventa-movil-${{ github.sha }}
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Reporte de cobertura
         if: always()
         uses: actions/upload-artifact@v4

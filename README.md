@@ -151,9 +151,12 @@ El ambiente local apunta a **`http://10.0.2.2:8080`**, que es como el emulador a
 .
 ├── .github/
 │   ├── workflows/
-│   │   └── ci.yml                      # PR a develop/main: lint → build → unitarias con cobertura
+│   │   ├── ci.yml                      # PR a develop/main: lint → build → unitarias; publica el APK
+│   │   ├── instrumentadas-nocturnas.yml # Compose UI Test sobre emulador, cada noche
+│   │   └── publicar.yml                # Release con el APK al etiquetar v*.*.*
 │   ├── dependabot.yml
 │   └── PULL_REQUEST_TEMPLATE.md
+├── AGENTS.md                           # Reglas para los agentes de IA que trabajen aquí
 ├── docs/
 │   ├── arquitectura.md                 # Cómo este cliente respeta los modelos de arquitectura
 │   ├── pantallas.md                    # Trazabilidad Figma ↔ paquete ↔ HU ↔ microservicio
@@ -194,7 +197,7 @@ Cada carpeta principal tiene un `README.md` que explica qué va en ella y cómo 
 ## 4. Dónde ubicar la historia de usuario móvil asignada? :
 
 1. Buscar el ID de la historia (`HU-M1.1-01`, `M2.4-01`, …) en [`docs/pantallas.md`](docs/pantallas.md). La tabla indica el **paquete**, el **frame de Figma** y la prioridad.
-2. Crear la rama desde `develop` con el ID de la historia como único nombre: `HU-M1.1-01`.
+2. Crear la rama desde `develop`: `feature/<ID>-<descripción corta>`.
 3. Trabajar dentro de `features/<dominio>/<flujo>/`. El `README.md` de `features` lista sus pantallas y sus historias.
 4. Las llamadas HTTP salen siempre por el cliente del microservicio en `core/api/<servicio>/`. Si la historia necesita un componente visual reutilizable, va en `shared/ui/`.
 5. Los textos van en `res/values/strings.xml` y `res/values-en/strings.xml`; los colores y la tipografía salen de `ui/theme/`.
@@ -230,7 +233,7 @@ El dominio de socios B2B no existe en este canal: es del portal.
 | Rutas de navegación | objetos de `core/navegacion/`, nunca cadenas literales en la pantalla | `Ruta.MisSiniestros` |
 | Claves de texto | `<dominio>_<pantalla>_<texto>` en `strings.xml` | `siniestros_lista_titulo` |
 | Prueba unitaria | mismo nombre con sufijo `Test`, en `src/test/` | `MisSiniestrosViewModelTest.kt` |
-| Ramas | Únicamente el ID de la historia, creada desde `develop` | `HU-M1.1-01`, `HA-S01` |
+| Ramas | `feature/`, `fix/` o `chore/` más el ID y una descripción corta, creadas desde `develop` | `feature/HU-M1.1-01-registro-kyc` |
 | Commits | Conventional Commits con el dominio como alcance | `feat(siniestros): lista con estado sin conexión` |
 
 Reglas de dependencia entre capas: `features` → `shared` y `core`; `shared` no depende de nadie; `core` no importa de `features`. Un dominio nunca importa a otro dominio: lo que comparten va a `shared`.
@@ -262,8 +265,8 @@ Según la [estrategia de pruebas v1.2](https://github.com/leonelparrales22/MISW4
 |---|---|---|---|
 | Unitarias (OBJ 02, ≥ 70 %) | JUnit4 + MockK + Turbine | `app/src/test/` | Cada *pull request* |
 | Base de datos local | `room-testing` sobre migraciones y DAO | `app/src/test/` | Cada *pull request* |
-| Interfaz y extremo a extremo (OBJ 06) | Compose UI Test + Espresso | `app/src/androidTest/` | Pendiente: ejecución nocturna sobre emulador |
-| Accesibilidad (OBJ 13) | Reglas de accesibilidad de Compose UI Test | `app/src/androidTest/` | Con las instrumentadas |
+| Interfaz y extremo a extremo (OBJ 06) | Compose UI Test | `app/src/androidTest/` | Ejecución nocturna sobre emulador, y bajo demanda |
+| Accesibilidad (OBJ 13) | Descripciones de accesibilidad verificadas con Compose UI Test | `app/src/androidTest/` | Con las instrumentadas |
 | Internacionalización (OBJ 12) | Revisión de `values/` y `values-en/` y casos manuales | — | Por sprint |
 
 Regla de integración: ningún cambio entra a `develop` ni a `main` con pruebas fallidas.
