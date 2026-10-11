@@ -1,4 +1,4 @@
-# MISW4501-202614-Grupo14-Solventa-Mobile
+# MISW4501-202614-Grupo14-Solventa-Movil
 
 Cliente móvil de **Solventa** (autoservicio del asegurado en movilidad: pólizas, siniestros, asistencia en sitio, notificaciones y renovación), construido en **Kotlin con Jetpack Compose**. Proyecto Final MISW4501 · Grupo 14 · Universidad de los Andes.
 
@@ -7,7 +7,7 @@ Este repositorio es uno de los cuatro componentes de la solución:
 | Componente | Repositorio | Tecnología |
 |---|---|---|
 | Cliente web | [`…-FrontWeb`](https://github.com/nicolasjaramillocely99/MISW4501-202614-Grupo14-Solventa-FrontWeb) | Angular + TypeScript |
-| **Cliente móvil (este)** | [`…-Mobile`](https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Mobile) | Kotlin + Jetpack Compose |
+| **Cliente móvil (este)** | [`…-Movil`](https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Movil) | Kotlin + Jetpack Compose |
 | Microservicios de negocio |[`…-Backend`](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa) | Go sobre ECS Fargate |
 | Infraestructura | `…-Infra` | Terraform sobre AWS |
 
@@ -62,11 +62,11 @@ No hace falta instalar Gradle: el repositorio trae el *wrapper* (`gradlew`), que
 ### 2.2 Abrir el proyecto por primera vez
 
 ```bash
-git clone https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Mobile.git
-cd MISW4501-202614-Grupo14-Solventa-Mobile
+git clone https://github.com/CarlosARios/MISW4501-202614-Grupo14-Solventa-Movil.git
+cd MISW4501-202614-Grupo14-Solventa-Movil
 ```
 
-El repositorio es privado: quien vaya a clonarlo necesita acceso de colaborador y una credencial de GitHub configurada —*token* personal o clave SSH—.
+El repositorio es público: no hace falta credencial para clonarlo. Para empujar cambios sí: acceso de colaborador y un *token* personal o una clave SSH.
 
 1. En Android Studio: **File → Open** y seleccione la **carpeta raíz** del repositorio, la que contiene `settings.gradle.kts`. No use *Import project* ni abra la carpeta `app/`.
 2. Si aparece el aviso de **Trust Project**, acéptelo: sin eso Gradle no se ejecuta.
