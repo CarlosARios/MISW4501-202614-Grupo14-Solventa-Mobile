@@ -11,13 +11,13 @@ Este repositorio es uno de los cuatro componentes de la solución:
 | Microservicios de negocio |[`…-Backend`](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa) | Go sobre ECS Fargate |
 | Infraestructura | `…-Infra` | Terraform sobre AWS |
 
-En el [modelo de componentes](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Arquitectura_final#modelo-de-componentes) el cliente mobile vive en **LAYER 4 · Clientes** y su comunicación es única con **LAYER 3 · Gateway** (Amazon API Gateway) por HTTPS; la identidad será administrada por **Amazon Cognito** (OIDC).
+En el [modelo de componentes](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Arquitectura_final#modelo-de-componentes) el cliente móvil se encuentra en **LAYER 4 · Clientes** y su comunicación es única con **LAYER 3 · Gateway** (Amazon API Gateway) por HTTPS; la identidad será administrada por **Amazon Cognito** (OIDC).
 
-**Esta aplicación consume el servicio de notificaciones.**
+**Esta aplicación consume el servicio de notificaciones**, los eventos llegan por *push*.
 
 ---
 
-## 1. Stack definido para el usuario móvil. 
+## 1. Stack definido para el usuario móvil
 
 Las versiones exactas se pueden validar en [`gradle/libs.versions.toml`](gradle/libs.versions.toml).
 
@@ -37,7 +37,7 @@ Las versiones exactas se pueden validar en [`gradle/libs.versions.toml`](gradle/
 | Pruebas de interfaz | Compose UI Test + Espresso | — / 3.7.0 |
 | Cobertura | Kover (umbral del proyecto: ≥ 70 %) | 0.9.11 |
 | Análisis estático | Android Lint | incluido en AGP |
-| Integración continua | GitHub Actions (por *pull request*) | — |
+| Integración y despliegue continuos | GitHub Actions: *pull request*, *push*, nocturna y publicación | — |
 | Dependencias vulnerables | Dependabot | — |
 
 Dispositivos soportados: **`minSdk 26`** (Android 8.0) y `targetSdk 35`. El `compileSdk` es 37. Lienzo de referencia del prototipo **390 × 844**. Idiomas: **es-CO** (predeterminado) y **en-US**.
@@ -194,7 +194,7 @@ Cada carpeta principal tiene un `README.md` que explica qué va en ella y cómo 
 
 ---
 
-## 4. Dónde ubicar la historia de usuario móvil asignada? :
+## 4. ¿Dónde ubicar la historia de usuario móvil asignada?
 
 1. Buscar el ID de la historia (`HU-M1.1-01`, `M2.4-01`, …) en [`docs/pantallas.md`](docs/pantallas.md). La tabla indica el **paquete**, el **frame de Figma** y la prioridad.
 2. Crear la rama desde `develop`: `feature/<ID>-<descripción corta>`.
