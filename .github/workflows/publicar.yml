@@ -48,7 +48,7 @@ jobs:
              "entrega/solventa-movil-${GITHUB_REF_NAME}.apk"
 
       - name: Publicar el Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: entrega/*.apk
           generate_release_notes: true
