@@ -18,9 +18,9 @@ serializationJson = "1.9.0"
 workManager = "2.12.0"
 camerax = "1.6.2"
 biometric = "1.1.0"
-coroutines = "1.10.2"
-mockk = "1.13.13"
-turbine = "1.2.0"
+coroutines = "1.11.0"
+mockk = "1.14.11"
+turbine = "1.2.1"
 
 # Procesamiento de anotaciones. El sufijo "-2.0.2" es la versión de KSP;
 # el prefijo debe coincidir exactamente con la versión de Kotlin de arriba.
