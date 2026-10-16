@@ -33,7 +33,7 @@ jobs:
           java-version: '21'
 
       - name: Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Verificar antes de publicar
         run: ./gradlew lintDebug testDebugUnitTest koverVerifyDebug
