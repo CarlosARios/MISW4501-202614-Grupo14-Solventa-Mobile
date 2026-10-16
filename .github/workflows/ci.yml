@@ -45,7 +45,7 @@ jobs:
       # publicación queda pendiente de una clave en los secretos.
       - name: APK instalable
         if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: solventa-movil-${{ github.sha }}
           path: app/build/outputs/apk/debug/app-debug.apk
@@ -54,7 +54,7 @@ jobs:
 
       - name: Reporte de cobertura
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cobertura-unitarias
           path: app/build/reports/kover/
@@ -62,7 +62,7 @@ jobs:
 
       - name: Reporte de Android Lint
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: reporte-lint
           path: app/build/reports/lint-results-debug.html
@@ -70,7 +70,7 @@ jobs:
 
       - name: Resultados de las pruebas
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pruebas-unitarias
           path: app/build/reports/tests/
