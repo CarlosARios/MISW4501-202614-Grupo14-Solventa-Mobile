@@ -26,16 +26,16 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Código fuente
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
 
       - name: Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       # Sin aceleración por hardware el emulador tarda tanto que el trabajo
       # expira. El agente de Ubuntu tiene KVM pero no se lo da al usuario
@@ -60,7 +60,7 @@ jobs:
 
       - name: Reporte de las instrumentadas
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: instrumentadas
           path: |
