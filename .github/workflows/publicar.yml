@@ -24,16 +24,16 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Código fuente
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
 
       - name: Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Verificar antes de publicar
         run: ./gradlew lintDebug testDebugUnitTest koverVerifyDebug
@@ -48,7 +48,7 @@ jobs:
              "entrega/solventa-movil-${GITHUB_REF_NAME}.apk"
 
       - name: Publicar el Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: entrega/*.apk
           generate_release_notes: true
