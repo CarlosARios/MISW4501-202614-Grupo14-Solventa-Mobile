@@ -35,7 +35,7 @@ jobs:
           java-version: '21'
 
       - name: Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       # Sin aceleración por hardware el emulador tarda tanto que el trabajo
       # expira. El agente de Ubuntu tiene KVM pero no se lo da al usuario
