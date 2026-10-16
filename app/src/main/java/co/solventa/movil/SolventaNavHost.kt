@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import co.solventa.movil.core.navegacion.Ruta
+import co.solventa.movil.features.acceso.ingreso.destinoIngreso
 import co.solventa.movil.features.acceso.registro.grafoRegistro
 import co.solventa.movil.shared.ui.BotonSolventa
 import co.solventa.movil.shared.ui.TipoBoton
@@ -50,8 +51,8 @@ fun SolventaNavHost(
         }
 
         grafoRegistro(navegacion)
+        destinoIngreso(navegacion)
 
-        composable<Ruta.Ingreso> { PantallaPendiente("M2a · Inicio de sesión · HU-M1.1-02") }
         composable<Ruta.Inicio> { PantallaPendiente("M3 · Inicio") }
     }
 }

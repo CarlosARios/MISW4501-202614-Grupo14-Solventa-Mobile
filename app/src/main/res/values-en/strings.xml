@@ -19,6 +19,46 @@
     <string name="bienvenida_ya_tengo_cuenta">I already have an account</string>
     <string name="pendiente_pantalla">Screen pending: %1$s</string>
 
+    <!-- M2a and M2c - sign in with device biometrics -->
+    <string name="ingreso_saludo">Hi, %1$s</string>
+    <string name="ingreso_biometria_instruccion">Confirm your identity with your device biometrics to continue.</string>
+    <string name="ingreso_biometria_toca">Touch the fingerprint sensor</string>
+    <string name="ingreso_biometria_descripcion">Fingerprint sensor</string>
+    <string name="ingreso_biometria_no_reconocida">Fingerprint not recognized</string>
+    <string name="ingreso_biometria_intento">Attempt %1$d of %2$d</string>
+    <string name="ingreso_biometria_reintentar">Try again</string>
+    <string name="ingreso_biometria_intenta_de_nuevo">We did not recognize your fingerprint. Place your finger properly on the sensor and try again.</string>
+    <string name="ingreso_biometria_pausada">We did not recognize your fingerprint. For security, biometrics is paused for this session: sign in with your password.</string>
+    <string name="ingreso_biometria_proximo">You will be able to use your fingerprint again next time you sign in.</string>
+    <string name="ingreso_biometria_usar_contrasena">Sign in with password</string>
+    <string name="ingreso_biometria_no_disponible">The system paused the sensor. Sign in with your password.</string>
+
+    <!-- Operating system dialog -->
+    <string name="ingreso_prompt_titulo">Solventa wants to verify your identity</string>
+    <string name="ingreso_prompt_detalle">Use your fingerprint or face to continue. Solventa does not store your biometric information: your device performs the check.</string>
+    <string name="ingreso_prompt_cancelar">Cancel</string>
+
+    <!-- M2b - sign in with email and password -->
+    <string name="ingreso_contrasena_titulo">Sign in</string>
+    <string name="ingreso_contrasena_por_eleccion">Sign in with your email and password. Your fingerprint is still available whenever you want to use it.</string>
+    <string name="ingreso_contrasena_introduccion">This device does not have biometrics enabled for Solventa, so use your email and password.</string>
+    <string name="ingreso_contrasena_correo">EMAIL ADDRESS</string>
+    <string name="ingreso_contrasena_clave">PASSWORD</string>
+    <string name="ingreso_contrasena_minimo">At least %1$d characters</string>
+    <string name="ingreso_contrasena_entrar">Sign in</string>
+    <string name="ingreso_contrasena_olvide">I forgot my password</string>
+    <string name="ingreso_contrasena_habilitar_biometria">Enable fingerprint or face on this device after signing in</string>
+    <string name="ingreso_contrasena_cierre_automatico">Your session closes automatically after 5 minutes of inactivity.</string>
+    <string name="ingreso_contrasena_crear_cuenta">Create my account</string>
+    <string name="ingreso_error_credenciales">We could not sign you in with that email and password. Check them and try again.</string>
+    <string name="ingreso_error_sin_conexion">No connection. Check your network and try again.</string>
+
+    <!-- M2d - session expired through inactivity -->
+    <string name="sesion_expirada_titulo">Your session expired</string>
+    <string name="sesion_expirada_detalle">For security we closed your session after 5 minutes of inactivity. Sign in again to continue where you left off.</string>
+    <string name="sesion_expirada_con_huella">Authenticate with fingerprint</string>
+    <string name="sesion_expirada_con_contrasena">Use my password</string>
+
     <!-- M1a and M1b - document capture -->
     <string name="registro_captura_titulo">Verify your identity</string>
     <string name="registro_captura_paso">Step 1 of 3 · Identity document</string>
