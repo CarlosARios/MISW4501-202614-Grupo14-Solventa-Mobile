@@ -18,7 +18,11 @@ Equivale a `src/app/core` del [cliente web](https://github.com/nicolasjaramilloc
 | `sincronizacion/` | *Workers* de WorkManager que vacían la cola cuando vuelve la conexión | Pantallas M9c y M10c (degradado y sin conexión) son su evidencia visible |
 | `i18n/` | Idioma activo (es-CO y en-US) y formateo de moneda, fecha y número con `NumberFormat` y `DateTimeFormatter` sobre el `Locale` | OBJ 12 · soporte multimoneda (COP, MXN, CLP, PEN) |
 | `navegacion/` | El contrato de rutas (`Ruta`) y la barra inferior (Inicio · Pólizas · Siniestros · Perfil). **El `NavHost` no vive aquí**: es la raíz de composición, conoce todos los dominios y `core` no puede importar de `features`, así que está en el paquete raíz como `SolventaNavHost` | Mapa de navegación móvil |
-| `errores/` | Manejo uniforme de errores HTTP, identificador de correlación en las peticiones y mensajes al usuario | Observabilidad con trazas correlacionadas · T6 |
+| `errores/` | **Hecho:** identificador de correlación en cada petición (`X-Correlation-Id`) y una línea de registro por petición y por fallo de red. **Pendiente:** manejo uniforme de errores HTTP y mensajes al usuario, que esperan el primer contrato de API | Observabilidad con trazas correlacionadas · T6 |
 | `di/` | Módulos de Hilt que proveen Retrofit, OkHttp, Room, WorkManager y los clientes de `api/` | La aplicación no construye dependencias a mano |
 
 Orden de los interceptores de OkHttp, igual que en el cliente web: **correlación → autenticación → errores HTTP**.
+
+De los tres, hoy solo existe el de **correlación**, en `errores/InterceptorDeCorrelacion.kt`, montado por `di/RedModule.kt`. El encabezado, el alfabeto y la longitud los fija `pkg/observability` del repositorio de servicios, y aquí se respetan al pie de la letra: si el móvil manda un valor que no encaja, el *middleware* lo descarta y genera otro, y se pierde justo lo que el identificador existe para dar. Por eso el interceptor **reemplaza** un valor inválido en vez de dejarlo pasar.
+
+El registro **no incluye el cuerpo ni los encabezados**: por ahí viajan el token y los datos del documento de identidad, y `logcat` lo lee cualquier aplicación con permisos de depuración.

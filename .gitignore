@@ -20,3 +20,11 @@ local.properties
 # Cuaderno de pendientes del responsable del cliente movil: control interno,
 # no documentacion del proyecto. Se mantiene fuera del repositorio a proposito.
 /docs/pendientes.md
+
+# Almacenes de claves de firma. Nunca entran al repositorio: quien tenga el
+# archivo y la contrasena puede publicar una version que los telefonos
+# aceptaran como nuestra. El de publicacion viaja como secreto del
+# repositorio, en base64, y solo lo ve el pipeline.
+*.jks
+*.keystore
+keystore.properties
