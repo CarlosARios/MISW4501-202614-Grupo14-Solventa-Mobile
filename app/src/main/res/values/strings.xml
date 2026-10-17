@@ -21,6 +21,46 @@
     <string name="bienvenida_ya_tengo_cuenta">Ya tengo cuenta</string>
     <string name="pendiente_pantalla">Pantalla pendiente: %1$s</string>
 
+    <!-- M2a y M2c · ingreso con la biometría del dispositivo -->
+    <string name="ingreso_saludo">Hola, %1$s</string>
+    <string name="ingreso_biometria_instruccion">Confirma tu identidad con la biometría de tu dispositivo para entrar.</string>
+    <string name="ingreso_biometria_toca">Toca el sensor de huella</string>
+    <string name="ingreso_biometria_descripcion">Sensor de huella</string>
+    <string name="ingreso_biometria_no_reconocida">Huella no reconocida</string>
+    <string name="ingreso_biometria_intento">Intento %1$d de %2$d</string>
+    <string name="ingreso_biometria_reintentar">Volver a intentar</string>
+    <string name="ingreso_biometria_intenta_de_nuevo">No reconocimos tu huella. Acomoda bien el dedo sobre el sensor y vuelve a intentarlo.</string>
+    <string name="ingreso_biometria_pausada">No reconocimos tu huella. Por seguridad, la biometría queda pausada para esta sesión: ingresa con tu contraseña.</string>
+    <string name="ingreso_biometria_proximo">Podrás volver a usar la huella en tu próximo ingreso.</string>
+    <string name="ingreso_biometria_usar_contrasena">Ingresar con contraseña</string>
+    <string name="ingreso_biometria_no_disponible">El sistema pausó el sensor. Ingresa con tu contraseña.</string>
+
+    <!-- Diálogo del sistema operativo. Los textos son nuestros; la ventana la pinta Android -->
+    <string name="ingreso_prompt_titulo">Solventa quiere verificar tu identidad</string>
+    <string name="ingreso_prompt_detalle">Usa tu huella o tu rostro para continuar. Solventa no almacena tu información biométrica: la validación la hace tu dispositivo.</string>
+    <string name="ingreso_prompt_cancelar">Cancelar</string>
+
+    <!-- M2b · ingreso con correo y contraseña -->
+    <string name="ingreso_contrasena_titulo">Inicia sesión</string>
+    <string name="ingreso_contrasena_por_eleccion">Ingresa con tu correo y tu contraseña. La huella sigue disponible cuando quieras usarla.</string>
+    <string name="ingreso_contrasena_introduccion">Este dispositivo no tiene biometría habilitada para Solventa, así que usa tu correo y contraseña.</string>
+    <string name="ingreso_contrasena_correo">CORREO ELECTRÓNICO</string>
+    <string name="ingreso_contrasena_clave">CONTRASEÑA</string>
+    <string name="ingreso_contrasena_minimo">Mínimo %1$d caracteres</string>
+    <string name="ingreso_contrasena_entrar">Entrar</string>
+    <string name="ingreso_contrasena_olvide">Olvidé mi contraseña</string>
+    <string name="ingreso_contrasena_habilitar_biometria">Habilitar la huella o el rostro en este dispositivo después de entrar</string>
+    <string name="ingreso_contrasena_cierre_automatico">Tu sesión se cierra automáticamente tras 5 minutos de inactividad.</string>
+    <string name="ingreso_contrasena_crear_cuenta">Crear mi cuenta</string>
+    <string name="ingreso_error_credenciales">No pudimos entrar con ese correo y esa contraseña. Revísalos e intenta de nuevo.</string>
+    <string name="ingreso_error_sin_conexion">No hay conexión. Revisa tu red e intenta de nuevo.</string>
+
+    <!-- M2d · sesión expirada por inactividad -->
+    <string name="sesion_expirada_titulo">Tu sesión expiró</string>
+    <string name="sesion_expirada_detalle">Por seguridad cerramos la sesión tras 5 minutos de inactividad. Vuelve a autenticarte para continuar donde estabas.</string>
+    <string name="sesion_expirada_con_huella">Autenticarme con huella</string>
+    <string name="sesion_expirada_con_contrasena">Usar mi contraseña</string>
+
     <!-- M1a y M1b · captura del documento -->
     <string name="registro_captura_titulo">Verifica tu identidad</string>
     <string name="registro_captura_paso">Paso 1 de 3 · Documento de identidad</string>
