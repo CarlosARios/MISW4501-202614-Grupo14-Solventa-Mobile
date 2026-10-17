@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -69,13 +70,27 @@ class IngresoViewModel @Inject constructor(
      * reintentar.
      */
     fun autenticarConHuella() {
-        val actual = _estado.value
-        if (actual.solicitandoHuella || actual.biometriaPausada) return
-        if (actual.metodo != MetodoDeIngreso.BIOMETRIA) return
+        // Se reserva el turno de forma atómica antes de lanzar la corrutina.
+        // Comprobar y marcar por separado deja pasar dos toques seguidos, y
+        // eso abriría dos diálogos y gastaría dos intentos por uno.
+        val anterior = _estado.getAndUpdate {
+            if (it.solicitandoHuella ||
+                it.biometriaPausada ||
+                it.metodo != MetodoDeIngreso.BIOMETRIA
+            ) {
+                it
+            } else {
+                it.copy(solicitandoHuella = true, error = null)
+            }
+        }
+        if (anterior.solicitandoHuella ||
+            anterior.biometriaPausada ||
+            anterior.metodo != MetodoDeIngreso.BIOMETRIA
+        ) {
+            return
+        }
 
         viewModelScope.launch {
-            _estado.update { it.copy(solicitandoHuella = true, error = null) }
-
             when (autenticador.autenticar()) {
                 ResultadoBiometrico.Exito -> desbloquearSesion()
 

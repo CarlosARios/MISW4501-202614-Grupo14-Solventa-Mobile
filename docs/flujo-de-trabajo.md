@@ -71,11 +71,13 @@ Es la misma estrategia de los otros dos repositorios del proyecto.
 | Workflow | Disparo | Qué corre |
 |---|---|---|
 | `ci.yml` | *pull request* hacia `develop` o `main`, y *push* a esas ramas | Android Lint → *build* de depuración → pruebas unitarias con Kover (umbral ≥ 70 %). En los *push* deja además el **APK instalable** como artefacto |
-| `instrumentadas-nocturnas.yml` | Diario a las 02:00 de Bogotá, y bajo demanda | Compose UI Test sobre un emulador con API 34 |
+| `instrumentadas-nocturnas.yml` | Diario a las 02:00 de Bogotá, y bajo demanda | Compose UI Test sobre un emulador con API 34, **fijado en es-CO** |
 | `publicar.yml` | Al empujar una etiqueta `v*.*.*` | Verifica, construye y publica un *Release* con el APK adjunto |
 | Dependabot | Semanal | Actualizaciones de Gradle y de las acciones de GitHub |
 
 Las ejecuciones programadas solo corren desde la **rama predeterminada** del repositorio: el archivo de las nocturnas tiene que estar en `develop` para que se dispare.
+
+El emulador de las nocturnas arranca con el idioma fijado en **es-CO**, el idioma por omisión de la aplicación. No es un capricho: las pruebas de interfaz comparan textos, y tanto los recursos de la aplicación (`values/` frente a `values-en/`) como las descripciones de accesibilidad de Compose cambian con el idioma del dispositivo. Sin fijarlo, una imagen de sistema distinta cambiaría el resultado sin que nadie hubiera tocado el código.
 
 ## Comandos de uso diario
 

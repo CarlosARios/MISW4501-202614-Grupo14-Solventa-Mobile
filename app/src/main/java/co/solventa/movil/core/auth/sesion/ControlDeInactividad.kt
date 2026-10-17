@@ -28,28 +28,44 @@ class ControlDeInactividad @Inject constructor(
 
     private var temporizador: Job? = null
 
+    /**
+     * Solo se cuenta la inactividad mientras hay sesión abierta. Sin esta
+     * bandera, un toque en bienvenida, registro o ingreso armaría el
+     * temporizador y a los cinco minutos aparecería el aviso de sesión
+     * expirada sin que nadie hubiera entrado.
+     */
+    private var vigilando = false
+
     /** Cada toque, cada navegación y cada respuesta del API lo llaman. */
     fun registrarActividad() {
-        if (_expirada.value) return
+        if (!vigilando || _expirada.value) return
         reiniciarTemporizador()
     }
 
     /** Arranca la vigilancia al abrir la sesión. */
     fun iniciar() {
+        vigilando = true
         _expirada.value = false
         reiniciarTemporizador()
     }
 
     /** El usuario se volvió a autenticar: la sesión sigue donde estaba. */
     fun reanudar() {
+        vigilando = true
         _expirada.value = false
         reiniciarTemporizador()
     }
 
-    /** Al cerrar sesión no hay nada que vigilar. */
+    /**
+     * Al cerrar sesión no hay nada que vigilar, y el aviso de expiración deja
+     * de tener sentido: si el usuario va a autenticarse de nuevo desde cero,
+     * la hoja no debe seguir encima.
+     */
     fun detener() {
+        vigilando = false
         temporizador?.cancel()
         temporizador = null
+        _expirada.value = false
     }
 
     private fun reiniciarTemporizador() {

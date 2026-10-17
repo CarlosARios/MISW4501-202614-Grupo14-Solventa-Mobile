@@ -104,4 +104,53 @@ class ControlDeInactividadTest {
 
         assertFalse(control.expirada.value)
     }
+
+    /**
+     * Regresión encontrada en el Moto G20: el detector de toques del `NavHost`
+     * está activo desde la bienvenida, así que `registrarActividad` llegaba
+     * antes de que nadie hubiera entrado. Armaba el temporizador y a los cinco
+     * minutos salía la hoja de sesión expirada encima del formulario de
+     * ingreso.
+     */
+    @Test
+    fun `sin sesion abierta los toques no arman el temporizador`() = runTest {
+        val control = ControlDeInactividad(this)
+
+        repeat(3) { control.registrarActividad() }
+        advanceTimeBy(limite * 2)
+        runCurrent()
+
+        assertFalse(
+            "Tocar bienvenida, registro o ingreso no puede expirar una sesión que no existe",
+            control.expirada.value,
+        )
+    }
+
+    @Test
+    fun `tras cerrar sesion los toques tampoco lo arman`() = runTest {
+        val control = ControlDeInactividad(this)
+        control.iniciar()
+        control.detener()
+
+        control.registrarActividad()
+        advanceTimeBy(limite * 2)
+        runCurrent()
+
+        assertFalse(control.expirada.value)
+    }
+
+    @Test
+    fun `detenerlo tambien retira un aviso de expiracion ya puesto`() = runTest {
+        val control = ControlDeInactividad(this)
+        control.iniciar()
+        advanceTimeBy(limite + 1)
+        runCurrent()
+        assertTrue(control.expirada.value)
+
+        // Es lo que pasa al salir a la pantalla de ingreso desde M2d: ya no
+        // hay sesión que vigilar y la hoja no debe quedarse encima.
+        control.detener()
+
+        assertFalse(control.expirada.value)
+    }
 }

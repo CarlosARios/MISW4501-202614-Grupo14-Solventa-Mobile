@@ -7,6 +7,9 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+# Lo escribe Android Studio al conectar un dispositivo físico: es de la máquina
+# de cada quien, no del proyecto.
+/.idea/deviceManager.xml
 .DS_Store
 /build
 /captures

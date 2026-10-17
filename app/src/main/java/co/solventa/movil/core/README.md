@@ -6,7 +6,7 @@ Equivale a `src/app/core` del [cliente web](https://github.com/nicolasjaramilloc
 
 | Carpeta | Responsabilidad | Vínculo con la arquitectura |
 |---|---|---|
-| `auth/sesion/` | Sesión del asegurado, tokens del proveedor de identidad (Amazon Cognito User Pool, OIDC) y su almacenamiento cifrado en el dispositivo | HA-S01 · EC-S03. En el móvil hay un solo rol humano: **asegurado** |
+| `auth/sesion/` | Sesión del asegurado, tokens del proveedor de identidad (Amazon Cognito User Pool, OIDC), su almacenamiento cifrado en el dispositivo y el **control de inactividad** que la cierra a los cinco minutos | HA-S01 · EC-S03. En el móvil hay un solo rol humano: **asegurado**. La inactividad solo se cuenta con sesión abierta: el detector de toques del `NavHost` está activo desde la bienvenida |
 | `auth/biometria/` | `BiometricPrompt` del sistema operativo y desbloqueo **local** de la sesión guardada, sin reautenticar contra el proveedor de identidad | HU-M1.1-02. El criterio de éxito es desbloqueo local, no una nueva autenticación completa |
 | `auth/interceptores/` | Adjunta el JWT (`Authorization: Bearer`) a las peticiones al API Gateway; ante 401 cierra la sesión y lleva a `acceso/ingreso` | El *authorizer* de Cognito valida el token en el gateway |
 | `api/` | Cliente HTTP base (Retrofit sobre OkHttp, URL del gateway desde `BuildConfig`) y **un cliente por microservicio** | Conector «solicitudes de la app» → API Gateway «Facade» |
