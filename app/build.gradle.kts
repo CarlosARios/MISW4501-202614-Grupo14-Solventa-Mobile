@@ -101,6 +101,12 @@ kover {
                     "co.solventa.movil.shared.ui.*",
                     "co.solventa.movil.MainActivity",
                     "co.solventa.movil.SolventaApp",
+                    // Adaptador del sensor biometrico: su unica logica es
+                    // traducir los codigos de BiometricPrompt, y eso solo se
+                    // ejerce con un sensor real. Se verifica en dispositivo.
+                    // El resto de core/auth si se prueba en la JVM.
+                    "co.solventa.movil.core.auth.biometria.AutenticadorBiometricoAndroid",
+                    "co.solventa.movil.core.auth.biometria.AutenticadorBiometricoAndroid\$*",
                     // Vistas previas: herramienta de diseno, no codigo que corra.
                     "*PreviewKt",
                     // Declaraciones de rutas: objetos sin comportamiento.
