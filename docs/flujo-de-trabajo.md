@@ -71,11 +71,13 @@ Es la misma estrategia de los otros dos repositorios del proyecto.
 | Workflow | Disparo | Qué corre |
 |---|---|---|
 | `ci.yml` | *pull request* hacia `develop` o `main`, y *push* a esas ramas | Android Lint → *build* de depuración → pruebas unitarias con Kover (umbral ≥ 70 %). En los *push* deja además el **APK instalable** como artefacto |
-| `instrumentadas-nocturnas.yml` | Diario a las 02:00 de Bogotá, y bajo demanda | Compose UI Test sobre un emulador con API 34, **fijado en es-CO** |
+| `pruebas-interfaz-nocturnas.yml` | Cada madrugada, y bajo demanda | Compose UI Test sobre un emulador con API 34, **fijado en es-CO** |
 | `publicar.yml` | Al empujar una etiqueta `v*.*.*` | Verifica, construye y publica un *Release* con el APK adjunto |
 | Dependabot | Semanal | Actualizaciones de Gradle y de las acciones de GitHub |
 
 Las ejecuciones programadas solo corren desde la **rama predeterminada** del repositorio: el archivo de las nocturnas tiene que estar en `develop` para que se dispare.
+
+La hora de un `cron` en GitHub Actions es una intención, no una promesa: las ejecuciones programadas se encolan y se sirven cuando hay capacidad. Entre el 12 y el 17 de octubre de 2026, con el cron puesto en las 07:00 UTC en punto, los retrasos medidos fueron de **entre 4 y 9 horas**, de modo que la supuesta corrida de las 02:00 de Bogotá caía entre las 06:14 y las 11:15, en plena jornada. Por eso el cron está ahora en un minuto que no es el 00 —en punto es cuando más carga tiene el planificador— y a una hora lo bastante temprana para que, incluso con el peor retraso observado, el resultado esté antes de que alguien empiece a trabajar. Si hiciera falta el resultado a una hora exacta, la única vía fiable es lanzarlo a mano con `workflow_dispatch`.
 
 El emulador de las nocturnas arranca con el idioma fijado en **es-CO**, el idioma por omisión de la aplicación. No es un capricho: las pruebas de interfaz comparan textos, y tanto los recursos de la aplicación (`values/` frente a `values-en/`) como las descripciones de accesibilidad de Compose cambian con el idioma del dispositivo. Sin fijarlo, una imagen de sistema distinta cambiaría el resultado sin que nadie hubiera tocado el código.
 

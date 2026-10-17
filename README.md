@@ -152,7 +152,7 @@ El ambiente local apunta a **`http://10.0.2.2:8080`**, que es como el emulador a
 ├── .github/
 │   ├── workflows/
 │   │   ├── ci.yml                      # PR a develop/main: lint → build → unitarias; publica el APK
-│   │   ├── instrumentadas-nocturnas.yml # Compose UI Test sobre emulador, cada noche
+│   │   ├── pruebas-interfaz-nocturnas.yml # Compose UI Test sobre emulador, cada noche
 │   │   └── publicar.yml                # Release con el APK al etiquetar v*.*.*
 │   ├── dependabot.yml
 │   └── PULL_REQUEST_TEMPLATE.md

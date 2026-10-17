@@ -13,7 +13,20 @@ enum class ProblemaCalidad { ILUMINACION_INSUFICIENTE, DOCUMENTO_INCOMPLETO, IMA
 /** Imagen capturada. La ruta apunta al archivo temporal del dispositivo. */
 data class ImagenDocumento(val cara: CaraDocumento, val rutaArchivo: String)
 
-/** Datos que el proveedor extrae del documento y que el usuario confirma. */
+/**
+ * Datos que el proveedor extrae del documento y que el usuario confirma.
+ *
+ * **Por qué los extrae el proveedor y no el teléfono.** La revisión INVEST de
+ * HU-M1.1-01 dejó el algoritmo de extracción sin fijar y aceptó un proveedor
+ * KYC simulado como evidencia de la historia, así que hoy llegan desde
+ * [RegistroKycRepositorio.analizarCaptura] y no se calculan aquí.
+ *
+ * Se evaluó leerlos en el dispositivo con reconocimiento de texto, que además
+ * evitaría sacar la imagen del documento del teléfono. Se descartó el
+ * 17/10/2026 por una razón de secuencia y no de técnica: **no hay todavía
+ * infraestructura que reciba los datos**, así que extraerlos no habilita
+ * nada. Vuelve a la mesa cuando exista el servicio de registro.
+ */
 data class DatosDocumento(
     val nombres: String,
     val apellidos: String,

@@ -11,7 +11,8 @@ import org.junit.Test
  * El repositorio simulado se prueba porque hoy es el que corre en la
  * aplicación, y porque su guion es lo que hace demostrable el recorrido
  * completo: si deja de fallar la primera vez, M1e y M1f se vuelven
- * inalcanzables sin que nadie se entere. Cuando lo reemplace el cliente real
+ * inalcanzables sin que nadie se entere. La poca luz, en cambio, ya no la
+ * finge: la mide la cámara en el dispositivo. Cuando lo reemplace el cliente real
  * de `core/api/`, estas pruebas se van con él.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -23,28 +24,36 @@ class RegistroKycRepositorioSimuladoTest {
     private val reverso = ImagenDocumento(CaraDocumento.REVERSO, "/tmp/reverso.jpg")
 
     @Test
-    fun `el primer intento del frente falla por iluminacion para poder mostrar M1f`() = runTest {
+    fun `el frente se acepta siempre y sin datos extraidos`() = runTest {
         val resultado = repositorio.analizarCaptura(frente)
+
+        assertTrue(resultado is ResultadoCaptura.Aceptada)
+        assertNull(
+            "Los datos del documento salen del reverso",
+            (resultado as ResultadoCaptura.Aceptada).datos,
+        )
+    }
+
+    /**
+     * La poca luz ya no se finge: la mide la cámara. Lo que el guion conserva
+     * es la borrosidad, que es un juicio del proveedor de verificación y no
+     * algo que el teléfono decida por su cuenta.
+     */
+    @Test
+    fun `el primer intento del reverso falla por borrosidad para poder mostrar M1f`() = runTest {
+        val resultado = repositorio.analizarCaptura(reverso)
 
         assertTrue(resultado is ResultadoCaptura.CalidadInsuficiente)
         assertEquals(
-            ProblemaCalidad.ILUMINACION_INSUFICIENTE,
+            ProblemaCalidad.IMAGEN_BORROSA,
             (resultado as ResultadoCaptura.CalidadInsuficiente).motivo,
         )
     }
 
     @Test
-    fun `el segundo intento del frente se acepta sin datos extraidos`() = runTest {
-        repositorio.analizarCaptura(frente)
+    fun `el segundo intento del reverso trae los datos del documento`() = runTest {
+        repositorio.analizarCaptura(reverso)
 
-        val resultado = repositorio.analizarCaptura(frente)
-
-        assertTrue(resultado is ResultadoCaptura.Aceptada)
-        assertNull((resultado as ResultadoCaptura.Aceptada).datos)
-    }
-
-    @Test
-    fun `el reverso trae los datos del documento desde el primer intento`() = runTest {
         val resultado = repositorio.analizarCaptura(reverso)
 
         val datos = (resultado as ResultadoCaptura.Aceptada).datos

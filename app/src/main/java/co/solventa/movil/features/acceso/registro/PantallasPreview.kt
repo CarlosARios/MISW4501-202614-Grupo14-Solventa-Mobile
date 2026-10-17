@@ -2,6 +2,7 @@ package co.solventa.movil.features.acceso.registro
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import co.solventa.movil.shared.ui.camara.camaraSimulada
 import co.solventa.movil.ui.theme.SolventaTheme
 
 /**
@@ -33,6 +34,8 @@ private fun VistaPreviaCapturaFrente() {
             cara = CaraDocumento.FRENTE,
             estado = RegistroUiState(),
             onCapturar = {},
+            onLuzInsuficiente = {},
+            camara = camaraSimulada(),
             onDescartarAviso = {},
             onAtras = {},
         )
@@ -47,6 +50,8 @@ private fun VistaPreviaCapturaReverso() {
             cara = CaraDocumento.REVERSO,
             estado = RegistroUiState(frente = ImagenDocumento(CaraDocumento.FRENTE, "")),
             onCapturar = {},
+            onLuzInsuficiente = {},
+            camara = camaraSimulada(),
             onDescartarAviso = {},
             onAtras = {},
         )
@@ -107,6 +112,8 @@ private fun VistaPreviaCapturaFrenteIngles() {
             cara = CaraDocumento.FRENTE,
             estado = RegistroUiState(),
             onCapturar = {},
+            onLuzInsuficiente = {},
+            camara = camaraSimulada(),
             onDescartarAviso = {},
             onAtras = {},
         )

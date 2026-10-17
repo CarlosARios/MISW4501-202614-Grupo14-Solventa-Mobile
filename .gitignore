@@ -16,3 +16,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Cuaderno de pendientes del responsable del cliente movil: control interno,
+# no documentacion del proyecto. Se mantiene fuera del repositorio a proposito.
+/docs/pendientes.md

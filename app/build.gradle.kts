@@ -105,6 +105,13 @@ kover {
                     // traducir los codigos de BiometricPrompt, y eso solo se
                     // ejerce con un sensor real. Se verifica en dispositivo.
                     // El resto de core/auth si se prueba en la JVM.
+                    // Envuelven CameraX y el permiso del sistema: no se
+                    // pueden ejercer sin dispositivo. Lo que sí se prueba es
+                    // la aritmética del medidor de luz, que queda fuera de
+                    // esta lista a propósito.
+                    "co.solventa.movil.shared.ui.camara.ControladorDeCamara",
+                    "co.solventa.movil.shared.ui.camara.CamaraDeDocumento",
+                    "co.solventa.movil.shared.ui.camara.VistaPreviaDeCamaraKt",
                     "co.solventa.movil.core.auth.biometria.AutenticadorBiometricoAndroid",
                     "co.solventa.movil.core.auth.biometria.AutenticadorBiometricoAndroid\$*",
                     // Vistas previas: herramienta de diseno, no codigo que corra.

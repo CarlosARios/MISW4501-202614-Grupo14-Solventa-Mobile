@@ -75,6 +75,17 @@
     <string name="registro_captura_accion">Capture</string>
     <string name="registro_captura_problemas">I\'m having trouble capturing</string>
     <string name="registro_captura_marco_descripcion">Guide frame for positioning the document</string>
+    <string name="registro_camara_permiso_titulo">We need the camera</string>
+    <string name="registro_camara_permiso_detalle">To photograph your document we have to use the phone camera. The image is not saved to your gallery.</string>
+    <string name="registro_camara_permiso_accion">Allow the camera</string>
+    <string name="registro_camara_negado_titulo">The camera is blocked</string>
+    <string name="registro_camara_negado_detalle">You denied the permission, so it has to be enabled from the phone settings: Apps · Solventa · Permissions · Camera.</string>
+    <string name="registro_camara_negado_accion">Open settings</string>
+    <string name="registro_camara_sin_camara">This phone does not have a camera we can use to capture the document.</string>
+    <string name="registro_camara_preparando">Getting the camera ready…</string>
+    <string name="registro_camara_poca_luz">There is not enough light: find a brighter spot before capturing</string>
+    <string name="registro_camara_vista_descripcion">Camera view with the frame to place the document</string>
+    <string name="registro_camara_error">We could not take the photo. Please try again.</string>
 
     <!-- M1f - insufficient lighting, a state of M1a -->
     <string name="registro_calidad_oscura_aviso">The image is too dark</string>

@@ -38,9 +38,10 @@ fun NavGraphBuilder.grafoRegistro(navegacion: NavController) {
             CapturaDocumentoPantalla(
                 cara = CaraDocumento.FRENTE,
                 estado = estado,
-                onCapturar = {
-                    viewModel.capturar(ImagenDocumento(CaraDocumento.FRENTE, RUTA_PENDIENTE))
+                onCapturar = { ruta ->
+                    viewModel.capturar(ImagenDocumento(CaraDocumento.FRENTE, ruta))
                 },
+                onLuzInsuficiente = viewModel::reportarLuzInsuficiente,
                 onDescartarAviso = viewModel::descartarProblemaCalidad,
                 onAtras = { navegacion.popBackStack() },
             )
@@ -57,9 +58,10 @@ fun NavGraphBuilder.grafoRegistro(navegacion: NavController) {
             CapturaDocumentoPantalla(
                 cara = CaraDocumento.REVERSO,
                 estado = estado,
-                onCapturar = {
-                    viewModel.capturar(ImagenDocumento(CaraDocumento.REVERSO, RUTA_PENDIENTE))
+                onCapturar = { ruta ->
+                    viewModel.capturar(ImagenDocumento(CaraDocumento.REVERSO, ruta))
                 },
+                onLuzInsuficiente = viewModel::reportarLuzInsuficiente,
                 onDescartarAviso = viewModel::descartarProblemaCalidad,
                 onAtras = { navegacion.popBackStack() },
             )
@@ -155,9 +157,3 @@ private fun viewModelDelGrafo(
     val entradaDelGrafo = remember(entrada) { navegacion.getBackStackEntry(Ruta.Registro) }
     return hiltViewModel(entradaDelGrafo)
 }
-
-/**
- * Marcador del archivo de la captura. Lo reemplaza la ruta real cuando entre
- * CameraX, que es un avance aparte de esta historia.
- */
-private const val RUTA_PENDIENTE = "pendiente://captura"

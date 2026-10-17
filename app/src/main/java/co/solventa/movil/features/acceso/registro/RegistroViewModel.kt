@@ -48,6 +48,22 @@ class RegistroViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Criterio 4, medido en el dispositivo: la cámara reporta poca luz y la
+     * foto no llega a tomarse.
+     *
+     * Antes este aviso lo fabricaba el repositorio simulado, que declaraba
+     * oscura la primera captura aunque la habitación estuviera iluminada. Con
+     * la cámara real la medida viene del sensor, así que el aviso aparece
+     * cuando de verdad falta luz y desaparece cuando el usuario la corrige.
+     */
+    fun reportarLuzInsuficiente() {
+        if (_estado.value.analizando) return
+        _estado.update {
+            it.copy(problemaCalidad = ProblemaCalidad.ILUMINACION_INSUFICIENTE)
+        }
+    }
+
     /** Cierra el aviso de calidad para volver a intentar la captura. */
     fun descartarProblemaCalidad() {
         _estado.update { it.copy(problemaCalidad = null) }

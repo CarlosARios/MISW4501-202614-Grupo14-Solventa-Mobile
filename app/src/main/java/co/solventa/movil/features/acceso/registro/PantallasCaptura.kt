@@ -1,5 +1,9 @@
 package co.solventa.movil.features.acceso.registro
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -7,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,9 +24,16 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -30,13 +42,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.solventa.movil.R
+import co.solventa.movil.shared.ui.AvisoSolventa
 import co.solventa.movil.shared.ui.BarraProgreso
 import co.solventa.movil.shared.ui.BotonSolventa
 import co.solventa.movil.shared.ui.ListaConsejos
 import co.solventa.movil.shared.ui.PantallaRegistro
+import co.solventa.movil.shared.ui.TipoAviso
 import co.solventa.movil.shared.ui.TipoBoton
+import co.solventa.movil.shared.ui.camara.CamaraDeDocumento
+import co.solventa.movil.shared.ui.camara.EstadoDeLaCamara
+import co.solventa.movil.shared.ui.camara.VistaPreviaDeCamara
+import co.solventa.movil.shared.ui.camara.recordarCamaraDeDocumento
 import co.solventa.movil.ui.theme.Espacio
 import co.solventa.movil.ui.theme.LocalColoresSolventa
+import kotlinx.coroutines.launch
 
 /**
  * M1a y M1b · captura del frente y del reverso del documento.
@@ -50,13 +69,18 @@ import co.solventa.movil.ui.theme.LocalColoresSolventa
 fun CapturaDocumentoPantalla(
     cara: CaraDocumento,
     estado: RegistroUiState,
-    onCapturar: () -> Unit,
+    onCapturar: (rutaArchivo: String) -> Unit,
+    onLuzInsuficiente: () -> Unit,
     onDescartarAviso: () -> Unit,
     onAtras: () -> Unit,
     modifier: Modifier = Modifier,
+    camara: CamaraDeDocumento = recordarCamaraDeDocumento(),
 ) {
     val colores = LocalColoresSolventa.current
     val esFrente = cara == CaraDocumento.FRENTE
+    val alcance = rememberCoroutineScope()
+    var tomandoFoto by remember { mutableStateOf(false) }
+    var falloLaFoto by remember { mutableStateOf(false) }
 
     PantallaRegistro(
         titulo = stringResource(R.string.registro_captura_titulo),
@@ -65,9 +89,28 @@ fun CapturaDocumentoPantalla(
         acciones = {
             BotonSolventa(
                 texto = stringResource(R.string.registro_captura_accion),
-                onClick = onCapturar,
+                onClick = {
+                    // Criterio 4: con poca luz no se toma la foto, se avisa.
+                    // La medida viene del propio sensor, no de un guion.
+                    if (camara.luzInsuficiente) {
+                        onLuzInsuficiente()
+                        return@BotonSolventa
+                    }
+                    val controlador = camara.controlador ?: return@BotonSolventa
+                    if (tomandoFoto) return@BotonSolventa
+                    tomandoFoto = true
+                    falloLaFoto = false
+                    alcance.launch {
+                        runCatching { controlador.capturar(cara.name.lowercase()) }
+                            .onSuccess(onCapturar)
+                            .onFailure { falloLaFoto = true }
+                        tomandoFoto = false
+                    }
+                },
                 icono = painterResource(R.drawable.ic_camara),
-                habilitado = !estado.analizando,
+                habilitado = !estado.analizando &&
+                    !tomandoFoto &&
+                    camara.estado == EstadoDeLaCamara.LISTA,
             )
             BotonSolventa(
                 texto = stringResource(R.string.registro_captura_problemas),
@@ -100,7 +143,24 @@ fun CapturaDocumentoPantalla(
                     R.string.registro_captura_reverso_etiqueta
                 },
             ),
+            camara = camara,
         )
+
+        if (camara.estado == EstadoDeLaCamara.LISTA && camara.luzInsuficiente) {
+            AvisoSolventa(
+                texto = stringResource(R.string.registro_camara_poca_luz),
+                tipo = TipoAviso.ADVERTENCIA,
+            )
+        }
+
+        if (falloLaFoto) {
+            AvisoSolventa(
+                texto = stringResource(R.string.registro_camara_error),
+                tipo = TipoAviso.ERROR,
+            )
+        }
+
+        EstadoDeLaCamaraAviso(camara = camara)
 
         Text(
             text = stringResource(
@@ -194,36 +254,114 @@ private fun HojaCalidadInsuficiente(
 
 /**
  * Marco guía donde se ubica el documento. La proporción es la de una cédula
- * colombiana; cuando entre CameraX, aquí va la vista previa de la cámara.
+ * colombiana.
+ *
+ * Dentro va la vista previa de la cámara cuando se puede. Cuando no —sin
+ * permiso, sin cámara o todavía preguntando— queda el marcador con la
+ * etiqueta, que es lo que había antes de CameraX: la pantalla sigue siendo
+ * navegable y las pruebas de interfaz siguen pudiendo leerla.
  */
 @Composable
-private fun MarcoDocumento(etiqueta: String, modifier: Modifier = Modifier) {
+private fun MarcoDocumento(
+    etiqueta: String,
+    camara: CamaraDeDocumento,
+    modifier: Modifier = Modifier,
+) {
     val colores = LocalColoresSolventa.current
-    val descripcion = stringResource(R.string.registro_captura_marco_descripcion)
+    val forma = RoundedCornerShape(co.solventa.movil.ui.theme.Radio.tarjeta)
+    val enVivo = camara.estado == EstadoDeLaCamara.LISTA
+    val descripcion = stringResource(
+        if (enVivo) {
+            R.string.registro_camara_vista_descripcion
+        } else {
+            R.string.registro_captura_marco_descripcion
+        },
+    )
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1.586f)
-            .background(
-                MaterialTheme.colorScheme.secondaryContainer,
-                RoundedCornerShape(co.solventa.movil.ui.theme.Radio.tarjeta),
-            )
-            .border(
-                2.dp,
-                MaterialTheme.colorScheme.secondary,
-                RoundedCornerShape(co.solventa.movil.ui.theme.Radio.tarjeta),
-            )
+            .clip(forma)
+            .background(MaterialTheme.colorScheme.secondaryContainer, forma)
+            .border(2.dp, MaterialTheme.colorScheme.secondary, forma)
             .clearAndSetSemantics { contentDescription = descripcion },
     ) {
-        Text(
-            text = etiqueta,
-            style = MaterialTheme.typography.labelMedium,
-            color = colores.textoSecundario,
-            letterSpacing = 2.sp,
-            textAlign = TextAlign.Center,
-        )
+        if (enVivo) {
+            VistaPreviaDeCamara(camara = camara, modifier = Modifier.fillMaxSize())
+        } else {
+            Text(
+                text = etiqueta,
+                style = MaterialTheme.typography.labelMedium,
+                color = colores.textoSecundario,
+                letterSpacing = 2.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
+}
+
+/**
+ * Lo que se le dice al usuario cuando la cámara no está disponible, con la
+ * salida que corresponda a cada caso.
+ *
+ * Negar el permiso no es lo mismo que no haberlo pedido: Android no deja
+ * volver a preguntar desde la aplicación una vez negado, así que ahí la única
+ * salida honesta es mandarlo a los ajustes en lugar de un botón que no haría
+ * nada.
+ */
+@Composable
+private fun EstadoDeLaCamaraAviso(camara: CamaraDeDocumento) {
+    val contexto = LocalContext.current
+    when (camara.estado) {
+        EstadoDeLaCamara.LISTA -> Unit
+
+        EstadoDeLaCamara.CONSULTANDO -> AvisoSolventa(
+            tipo = TipoAviso.INFORMACION,
+            texto = stringResource(R.string.registro_camara_preparando),
+        )
+
+        EstadoDeLaCamara.SIN_CAMARA -> AvisoSolventa(
+            tipo = TipoAviso.ADVERTENCIA,
+            texto = stringResource(R.string.registro_camara_sin_camara),
+        )
+
+        EstadoDeLaCamara.SIN_PERMISO -> {
+            AvisoSolventa(
+                tipo = TipoAviso.INFORMACION,
+                titulo = stringResource(R.string.registro_camara_permiso_titulo),
+                texto = stringResource(R.string.registro_camara_permiso_detalle),
+            )
+            BotonSolventa(
+                texto = stringResource(R.string.registro_camara_permiso_accion),
+                onClick = camara.pedirPermiso,
+                tipo = TipoBoton.SECUNDARIO,
+            )
+        }
+
+        EstadoDeLaCamara.PERMISO_NEGADO -> {
+            AvisoSolventa(
+                tipo = TipoAviso.ADVERTENCIA,
+                titulo = stringResource(R.string.registro_camara_negado_titulo),
+                texto = stringResource(R.string.registro_camara_negado_detalle),
+            )
+            BotonSolventa(
+                texto = stringResource(R.string.registro_camara_negado_accion),
+                onClick = { contexto.abrirAjustesDeLaAplicacion() },
+                tipo = TipoBoton.SECUNDARIO,
+            )
+        }
+    }
+}
+
+/** Lleva a la ficha de la aplicación en los ajustes del sistema. */
+private fun Context.abrirAjustesDeLaAplicacion() {
+    startActivity(
+        Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", packageName, null),
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+    )
 }
 
 /** Barra de avance con la etiqueta del paso, común a las ocho pantallas. */

@@ -61,6 +61,38 @@ class RegistroViewModelTest {
             assertFalse("Faltan los términos", estado.puedeVerificar)
         }
 
+    // Criterio 4 — la poca luz la mide la cámara y el aviso sale antes de
+    // tomar la foto, no después de enviarla.
+    @Test
+    fun `la camara reporta poca luz y se avisa sin llegar a capturar`() =
+        runTest(dispatcher) {
+            val viewModel = crearViewModel()
+
+            viewModel.reportarLuzInsuficiente()
+
+            assertEquals(
+                ProblemaCalidad.ILUMINACION_INSUFICIENTE,
+                viewModel.estado.value.problemaCalidad,
+            )
+            assertEquals(
+                "No se debe consultar al proveedor con una foto que no se tomó",
+                0,
+                repositorio.capturasAnalizadas,
+            )
+            assertNull(viewModel.estado.value.frente)
+        }
+
+    @Test
+    fun `el aviso de poca luz se retira al volver a intentarlo`() =
+        runTest(dispatcher) {
+            val viewModel = crearViewModel()
+            viewModel.reportarLuzInsuficiente()
+
+            viewModel.descartarProblemaCalidad()
+
+            assertNull(viewModel.estado.value.problemaCalidad)
+        }
+
     // Criterio 4 — la calidad insuficiente se informa durante la captura y el
     // flujo no avanza con esa imagen.
     @Test
@@ -270,7 +302,12 @@ private class RepositorioFalso : RegistroKycRepositorio {
     var resultadoCaptura: ResultadoCaptura = ResultadoCaptura.Aceptada(datos = null)
     val verificacion = CompletableDeferred<ResultadoVerificacion>()
 
+    /** Cuántas fotos llegaron al proveedor. Ninguna si no se tomó ninguna. */
+    var capturasAnalizadas = 0
+        private set
+
     override suspend fun analizarCaptura(imagen: ImagenDocumento): ResultadoCaptura {
+        capturasAnalizadas++
         val resultado = resultadoCaptura
         return if (resultado is ResultadoCaptura.Aceptada && imagen.cara == CaraDocumento.REVERSO) {
             ResultadoCaptura.Aceptada(DATOS)
