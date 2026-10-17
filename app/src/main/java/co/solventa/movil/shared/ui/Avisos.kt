@@ -57,7 +57,7 @@ fun AvisoSolventa(
             Triple(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.errorContainer, R.drawable.ic_circulo_x)
 
         TipoAviso.INFORMACION ->
-            Triple(colores.informacionFuerte, colores.informacionSuave, R.drawable.ic_reloj)
+            Triple(colores.informacionFuerte, colores.informacionSuave, R.drawable.ic_circulo_info)
     }
 
     val descripcion = listOfNotNull(titulo, texto).joinToString(". ")

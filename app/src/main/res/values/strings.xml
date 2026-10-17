@@ -77,6 +77,17 @@
     <string name="registro_captura_accion">Capturar</string>
     <string name="registro_captura_problemas">Tengo problemas para capturar</string>
     <string name="registro_captura_marco_descripcion">Marco guía para ubicar el documento</string>
+    <string name="registro_camara_permiso_titulo">Necesitamos la cámara</string>
+    <string name="registro_camara_permiso_detalle">Para fotografiar tu documento tenemos que usar la cámara del teléfono. La imagen no se guarda en tu galería.</string>
+    <string name="registro_camara_permiso_accion">Permitir la cámara</string>
+    <string name="registro_camara_negado_titulo">La cámara está bloqueada</string>
+    <string name="registro_camara_negado_detalle">Negaste el permiso, así que hay que activarlo desde los ajustes del teléfono: Aplicaciones · Solventa · Permisos · Cámara.</string>
+    <string name="registro_camara_negado_accion">Abrir los ajustes</string>
+    <string name="registro_camara_sin_camara">Este teléfono no tiene una cámara que podamos usar para capturar el documento.</string>
+    <string name="registro_camara_preparando">Preparando la cámara…</string>
+    <string name="registro_camara_poca_luz">Hay poca luz: busca un lugar más iluminado antes de capturar</string>
+    <string name="registro_camara_vista_descripcion">Vista de la cámara con el marco para ubicar el documento</string>
+    <string name="registro_camara_error">No pudimos tomar la foto. Inténtalo de nuevo.</string>
 
     <!-- M1f · iluminación insuficiente, estado de M1a -->
     <string name="registro_calidad_oscura_aviso">La imagen está muy oscura</string>

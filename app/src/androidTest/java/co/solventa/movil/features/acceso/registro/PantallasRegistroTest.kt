@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import co.solventa.movil.R
+import co.solventa.movil.shared.ui.camara.camaraSimulada
 import co.solventa.movil.ui.theme.SolventaTheme
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -51,6 +52,8 @@ class PantallasRegistroTest {
                     cara = CaraDocumento.FRENTE,
                     estado = RegistroUiState(),
                     onCapturar = {},
+                    onLuzInsuficiente = {},
+                    camara = camaraSimulada(),
                     onDescartarAviso = {},
                     onAtras = {},
                 )
@@ -79,6 +82,8 @@ class PantallasRegistroTest {
                     cara = CaraDocumento.REVERSO,
                     estado = RegistroUiState(),
                     onCapturar = {},
+                    onLuzInsuficiente = {},
+                    camara = camaraSimulada(),
                     onDescartarAviso = {},
                     onAtras = {},
                 )
@@ -103,6 +108,8 @@ class PantallasRegistroTest {
                         problemaCalidad = ProblemaCalidad.ILUMINACION_INSUFICIENTE,
                     ),
                     onCapturar = {},
+                    onLuzInsuficiente = {},
+                    camara = camaraSimulada(),
                     onDescartarAviso = {},
                     onAtras = {},
                 )
@@ -263,6 +270,8 @@ class PantallasRegistroTest {
                     cara = CaraDocumento.FRENTE,
                     estado = RegistroUiState(),
                     onCapturar = {},
+                    onLuzInsuficiente = {},
+                    camara = camaraSimulada(),
                     onDescartarAviso = {},
                     onAtras = {},
                 )

@@ -1,4 +1,4 @@
-name: Instrumentadas nocturnas
+name: Pruebas de interfaz nocturnas
 
 # Pruebas de interfaz con Compose UI Test sobre un emulador. Van aparte del
 # pipeline de cada pull request porque levantar un emulador toma entre 8 y 12
@@ -11,12 +11,23 @@ name: Instrumentadas nocturnas
 
 on:
   schedule:
-    # 07:00 UTC = 02:00 en Bogotá. Termina antes de que alguien empiece a trabajar.
-    - cron: '0 7 * * *'
+    # 04:23 UTC = 23:23 en Bogotá del día anterior.
+    #
+    # La hora programada es una intención, no una promesa: GitHub encola las
+    # ejecuciones programadas y las sirve cuando hay capacidad. Con el cron
+    # anterior —07:00 UTC, en punto— los retrasos medidos fueron de entre 4 y
+    # 9 horas, así que la supuesta corrida de las 02:00 de Bogotá caía entre
+    # las 06:14 y las 11:15, en plena jornada.
+    #
+    # Dos medidas contra eso: un minuto que no sea el 00, porque en punto es
+    # cuando más carga tiene el planificador, y una hora lo bastante temprana
+    # para que incluso con el retraso peor observado el resultado esté listo
+    # antes de que alguien empiece a trabajar.
+    - cron: '23 4 * * *'
   workflow_dispatch:
 
 concurrency:
-  group: instrumentadas-${{ github.ref }}
+  group: pruebas-interfaz-nocturnas-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -55,7 +66,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated
           # El idioma del emulador se fija a propósito. Compose nombra el velo
           # de la hoja inferior según el idioma del dispositivo («Close sheet»
           # o «Cerrar hoja»), y la aplicación resuelve `values/` o `values-en`

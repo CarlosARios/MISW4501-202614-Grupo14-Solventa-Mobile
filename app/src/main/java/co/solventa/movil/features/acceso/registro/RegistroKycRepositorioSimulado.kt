@@ -20,10 +20,15 @@ import javax.inject.Singleton
  *
  * | Momento | Resultado | Pantalla que se muestra |
  * |---|---|---|
- * | Primera captura del frente | Iluminación insuficiente | M1f |
+ * | Primera captura del reverso | Imagen borrosa | M1f |
  * | Capturas siguientes | Aceptada | M1a → M1b → M1c |
  * | Primera verificación | No superada | M1e |
  * | Verificaciones siguientes | Exitosa | M1d |
+ *
+ * **La poca luz ya no se finge aquí.** La mide la cámara en el dispositivo y
+ * el aviso sale antes de tomar la foto, que es lo que pide el criterio 4. Lo
+ * que este guion conserva es la borrosidad, porque juzgarla es tarea del
+ * proveedor de verificación y no del teléfono.
  *
  * Los contadores viven en el singleton, así que sobreviven al `reiniciar()`
  * del `ViewModel`: después de *Intentar de nuevo* el recorrido fluye hasta el
@@ -40,20 +45,20 @@ import javax.inject.Singleton
 @Singleton
 class RegistroKycRepositorioSimulado @Inject constructor() : RegistroKycRepositorio {
 
-    private val intentosDelFrente = AtomicInteger(0)
+    private val intentosDelReverso = AtomicInteger(0)
     private val intentosDeVerificacion = AtomicInteger(0)
 
     override suspend fun analizarCaptura(imagen: ImagenDocumento): ResultadoCaptura {
         delay(DEMORA_ANALISIS_MS)
         return when (imagen.cara) {
-            CaraDocumento.FRENTE ->
-                if (intentosDelFrente.incrementAndGet() == 1) {
-                    ResultadoCaptura.CalidadInsuficiente(ProblemaCalidad.ILUMINACION_INSUFICIENTE)
-                } else {
-                    ResultadoCaptura.Aceptada(datos = null)
-                }
+            CaraDocumento.FRENTE -> ResultadoCaptura.Aceptada(datos = null)
 
-            CaraDocumento.REVERSO -> ResultadoCaptura.Aceptada(datos = DATOS_DE_EJEMPLO)
+            CaraDocumento.REVERSO ->
+                if (intentosDelReverso.incrementAndGet() == 1) {
+                    ResultadoCaptura.CalidadInsuficiente(ProblemaCalidad.IMAGEN_BORROSA)
+                } else {
+                    ResultadoCaptura.Aceptada(datos = DATOS_DE_EJEMPLO)
+                }
         }
     }
 
