@@ -7,6 +7,15 @@ plugins {
     alias(libs.plugins.kover)
 }
 
+/**
+ * Ruta del almacen de claves de publicacion, si esta disponible.
+ *
+ * Solo el pipeline la define, a partir del secreto del repositorio. En una
+ * maquina sin almacen esto queda nulo y `assembleRelease` produce un APK sin
+ * firmar, igual que antes: nadie del equipo se bloquea por no tener la clave.
+ */
+val rutaDelAlmacen: String? = System.getenv("RUTA_ALMACEN_DE_CLAVES")
+
 android {
     namespace = "co.solventa.movil"
     compileSdk {
@@ -23,6 +32,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (rutaDelAlmacen != null) {
+            create("publicacion") {
+                storeFile = file(rutaDelAlmacen)
+                storePassword = System.getenv("CLAVE_DEL_ALMACEN")
+                keyAlias = System.getenv("ALIAS_DE_LA_CLAVE")
+                keyPassword = System.getenv("CLAVE_DE_LA_CLAVE")
+            }
+        }
+    }
+
     buildTypes {
         // Local: desarrollo diario contra el docker-compose del repositorio de
         // servicios. 10.0.2.2 es como el emulador alcanza el localhost del PC;
@@ -30,7 +50,7 @@ android {
         debug {
             buildConfigField("String", "AMBIENTE", "\"local\"")
             buildConfigField("String", "API_GATEWAY_URL", "\"http://10.0.2.2:8080\"")
-            buildConfigField("String", "COGNITO_REGION", "\"us-east-1\"")
+            buildConfigField("String", "COGNITO_REGION", "\"us-east-2\"")
             buildConfigField("String", "COGNITO_USER_POOL_ID", "\"local\"")
             buildConfigField("String", "COGNITO_CLIENTE_ID", "\"local\"")
         }
@@ -38,14 +58,29 @@ android {
         // Producción (demo): la entrega evaluable que despliega el pipeline.
         // Los valores reales salen del repositorio de infraestructura (Terraform).
         release {
+            if (rutaDelAlmacen != null) {
+                signingConfig = signingConfigs.getByName("publicacion")
+            }
             buildConfigField("String", "AMBIENTE", "\"produccion\"")
             buildConfigField("String", "API_GATEWAY_URL", "\"PENDIENTE\"")
-            buildConfigField("String", "COGNITO_REGION", "\"us-east-1\"")
+            buildConfigField("String", "COGNITO_REGION", "\"us-east-2\"")
             buildConfigField("String", "COGNITO_USER_POOL_ID", "\"PENDIENTE\"")
             buildConfigField("String", "COGNITO_CLIENTE_ID", "\"PENDIENTE\"")
+            // Sin `packageScope`: el valor por omisión es `**`, o sea todo.
+            //
+            // El andamiaje traía `setOf("androidx.**", "kotlin.**",
+            // "kotlinx.**")`, que **excluía nuestro propio código** de la
+            // optimización y dejaba a R8 tocando las librerías de forma
+            // inconsistente con quien las usa. El APK arrancaba y moría al
+            // instante con `IllegalAccessError` en `WorkManagerInitializer`
+            // —verificado en el Moto G20 el 17/10/2026—.
+            //
+            // Además `packageScope` es experimental y exige
+            // `android.r8.gradual.support=true`, que este proyecto no
+            // declara. No hay razón para apartarse del comportamiento por
+            // omisión, que es el camino probado.
             optimization {
                 enable = true
-                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
         }
 
@@ -160,7 +195,6 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
-    debugImplementation(libs.okhttp.logging)
 
     // Trabajo en segundo plano
     implementation(libs.androidx.work.runtime.ktx)
@@ -191,6 +225,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
