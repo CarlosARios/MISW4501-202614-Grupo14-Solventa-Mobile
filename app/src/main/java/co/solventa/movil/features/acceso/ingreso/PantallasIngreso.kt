@@ -13,13 +13,18 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -39,6 +44,7 @@ import co.solventa.movil.shared.ui.TipoAviso
 import co.solventa.movil.shared.ui.TipoBoton
 import co.solventa.movil.ui.theme.Espacio
 import co.solventa.movil.ui.theme.LocalColoresSolventa
+import kotlinx.coroutines.launch
 
 /**
  * M2a y M2c · ingreso con la biometría del dispositivo.
@@ -280,7 +286,37 @@ fun IngresoContrasenaPantalla(
  *
  * Es una hoja inferior y no una pantalla: aparece encima de donde estaba el
  * usuario, porque el mensaje promete devolverlo ahí mismo.
+ *
+ * La hoja no se puede ignorar, y conseguirlo pide más que dejar vacío
+ * `onDismissRequest`: tocar el velo oculta la hoja igual y Material3 deja su
+ * ventana encima tragándose todos los toques, con la aplicación bloqueada
+ * —así se encontró en el Moto G20—. Por eso se desactivan los gestos y el
+ * botón atrás, y si aun así llega la petición de cierre, se vuelve a mostrar.
  */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HojaDeSesionExpirada(
+    onConHuella: () -> Unit,
+    onConContrasena: () -> Unit,
+) {
+    val estado = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val alcance = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        onDismissRequest = { alcance.launch { estado.show() } },
+        sheetState = estado,
+        sheetGesturesEnabled = false,
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
+        dragHandle = null,
+    ) {
+        ContenidoSesionExpirada(
+            onConHuella = onConHuella,
+            onConContrasena = onConContrasena,
+        )
+    }
+}
+
+/** El cuerpo de M2d, separado para poder dibujarlo en las vistas previas. */
 @Composable
 fun ContenidoSesionExpirada(
     onConHuella: () -> Unit,
@@ -290,8 +326,11 @@ fun ContenidoSesionExpirada(
     val colores = LocalColoresSolventa.current
     Column(
         verticalArrangement = Arrangement.spacedBy(Espacio.x16),
+        // La hoja va sin asa de arrastre —no se puede cerrar arrastrándola—,
+        // así que el margen superior lo pone el contenido.
         modifier = modifier.padding(
             start = Espacio.x16,
+            top = Espacio.x24,
             end = Espacio.x16,
             bottom = Espacio.x32,
         ),

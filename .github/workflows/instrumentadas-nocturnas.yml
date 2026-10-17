@@ -56,7 +56,31 @@ jobs:
           profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew :app:connectedDebugAndroidTest
+          # El idioma del emulador se fija a propósito. Compose nombra el velo
+          # de la hoja inferior según el idioma del dispositivo («Close sheet»
+          # o «Cerrar hoja»), y la aplicación resuelve `values/` o `values-en`
+          # por lo mismo: si la imagen del sistema cambiara de idioma, las
+          # pruebas cambiarían de resultado sin que nadie tocara el código.
+          # Se elige es-CO porque es el idioma por omisión de la aplicación.
+          script: |
+            adb root
+            adb shell stop
+            adb shell setprop persist.sys.locale es-CO
+            adb shell start
+            adb wait-for-device
+            timeout 300 adb shell 'while [ "$(getprop sys.boot_completed)" != "1" ]; do sleep 2; done'
+            # Reiniciar el marco de trabajo puede devolver las animaciones, y
+            # con animaciones las pruebas de Compose se quedan esperando.
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            idioma=$(adb shell getprop persist.sys.locale | tr -d "[:space:]")
+            echo "Idioma del emulador: $idioma"
+            if [ "$idioma" != "es-CO" ]; then
+              echo "::error::El emulador quedó en '$idioma' en vez de es-CO; las pruebas de interfaz comparan textos y darían un resultado que no corresponde."
+              exit 1
+            fi
+            ./gradlew :app:connectedDebugAndroidTest
 
       - name: Reporte de las instrumentadas
         if: always()
