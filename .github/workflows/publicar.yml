@@ -1,0 +1,169 @@
+name: Publicar APK
+
+# Despliegue continuo del cliente movil (T5).
+#
+# Un servicio se despliega en Fargate; una aplicacion movil no tiene donde
+# desplegarse, asi que su equivalente es dejar el artefacto instalable al
+# alcance de quien lo necesita, automaticamente y sin que nadie construya
+# nada a mano. Hay dos canales:
+#
+#   - Al integrar a `main` se actualiza el Release permanente
+#     `produccion-demo` con el APK recien construido. Es el analogo del
+#     despliegue rolling: siempre hay una version vigente en el mismo
+#     enlace, y la anterior se reemplaza.
+#   - Al etiquetar `vX.Y.Z` se publica un Release aparte que no se toca mas,
+#     para poder volver a una entrega concreta.
+#
+# El APK es el de `release`: minificado con R8 y firmado con la clave de
+# publicacion. El de depuracion pesa cuatro veces mas y no representa lo que
+# se entrega.
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      publicar:
+        description: >-
+          Publicar el Release. Sin marcar hace un ensayo: construye, firma y
+          comprueba la firma, deja el APK como artefacto y no publica nada.
+          Es como conviene estrenar la clave de publicacion.
+        type: boolean
+        default: false
+
+# No cancelar una publicacion a medias: deja el Release sin artefacto.
+concurrency:
+  group: publicar-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    name: Construir y publicar el APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Código fuente
+        uses: actions/checkout@v7
+
+      - name: JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Verificar antes de publicar
+        run: ./gradlew lintDebug testDebugUnitTest koverVerifyDebug
+
+      # El almacen viaja como secreto en base64 porque un secreto de GitHub
+      # solo guarda texto. Se escribe fuera del arbol de trabajo para que no
+      # pueda colarse en un artefacto ni en el APK.
+      - name: Preparar la clave de publicación
+        env:
+          ALMACEN_EN_BASE64: ${{ secrets.ALMACEN_DE_CLAVES_BASE64 }}
+        run: |
+          if [ -z "$ALMACEN_EN_BASE64" ]; then
+            echo "::error::Falta el secreto ALMACEN_DE_CLAVES_BASE64. Sin el, el APK saldria sin firmar y no se podria instalar."
+            exit 1
+          fi
+          printf '%s' "$ALMACEN_EN_BASE64" | base64 -d > "$RUNNER_TEMP/publicacion.jks"
+
+      - name: Construir el APK de producción
+        env:
+          RUTA_ALMACEN_DE_CLAVES: ${{ runner.temp }}/publicacion.jks
+          CLAVE_DEL_ALMACEN: ${{ secrets.CLAVE_DEL_ALMACEN }}
+          ALIAS_DE_LA_CLAVE: ${{ secrets.ALIAS_DE_LA_CLAVE }}
+          CLAVE_DE_LA_CLAVE: ${{ secrets.CLAVE_DE_LA_CLAVE }}
+        run: ./gradlew assembleRelease
+
+      # Si saliera sin firmar, el Release publicaria un archivo que nadie
+      # puede instalar y el fallo solo se notaria al intentarlo.
+      - name: Comprobar que quedó firmado
+        run: |
+          APK=app/build/outputs/apk/release/app-release.apk
+          if [ ! -f "$APK" ]; then
+            echo "::error::No hay app-release.apk. El build dejo app-release-unsigned.apk, asi que la firma no se aplico."
+            ls -l app/build/outputs/apk/release/
+            exit 1
+          fi
+          # El runner trae varias versiones de build-tools, asi que el
+          # comodin devuelve mas de una ruta: hay que elegir una, y la mas
+          # reciente es la que corresponde.
+          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          echo "Comprobando con $APKSIGNER"
+          "$APKSIGNER" verify --print-certs "$APK"
+
+      - name: Nombrar el archivo
+        id: nombrar
+        run: |
+          mkdir -p entrega
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            VERSION="${GITHUB_REF_NAME}"
+          else
+            VERSION="produccion-demo-$(git rev-parse --short HEAD)"
+          fi
+          cp app/build/outputs/apk/release/app-release.apk "entrega/solventa-movil-${VERSION}.apk"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Publicar la entrega vigente
+        if: github.ref_type != 'tag' && (github.event_name != 'workflow_dispatch' || inputs.publicar)
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: produccion-demo
+          name: Entrega vigente (producción demo)
+          files: entrega/*.apk
+          prerelease: true
+          body: |
+            APK de **producción (demo)** del cliente móvil, reconstruido en cada
+            integración a `main`. Este enlace siempre apunta a la versión vigente.
+
+            - Commit: `${{ github.sha }}`
+            - Construido: ${{ github.event.head_commit.timestamp }}
+
+            Minificado con R8 y firmado con la clave de publicación del proyecto.
+            Requiere **Android 8.0 (API 26) o superior** y permitir la instalación
+            desde orígenes desconocidos.
+
+            Para una entrega concreta que no cambie, usar los Releases con
+            etiqueta `vX.Y.Z`.
+
+      - name: Publicar la entrega etiquetada
+        if: github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.publicar)
+        uses: softprops/action-gh-release@v3
+        with:
+          files: entrega/*.apk
+          generate_release_notes: true
+          body: |
+            Cliente móvil de Solventa — ${{ github.ref_name }}
+
+            APK de producción (demo), minificado con R8 y firmado con la clave de
+            publicación del proyecto. Requiere **Android 8.0 (API 26) o superior**
+            y permitir la instalación desde orígenes desconocidos.
+
+      - name: Guardar el APK del ensayo
+        if: github.event_name == 'workflow_dispatch' && !inputs.publicar
+        uses: actions/upload-artifact@v7
+        with:
+          name: ensayo-${{ steps.nombrar.outputs.version }}
+          path: entrega/*.apk
+          if-no-files-found: error
+
+      - name: Resumen del ensayo
+        if: github.event_name == 'workflow_dispatch' && !inputs.publicar
+        run: |
+          echo "### Ensayo, sin publicar" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "El APK se construyo y la firma quedo comprobada. Esta como artefacto de esta ejecucion." >> "$GITHUB_STEP_SUMMARY"
+          echo "Para publicar de verdad, volver a lanzarlo marcando **publicar**." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Retirar la clave
+        if: always()
+        run: rm -f "$RUNNER_TEMP/publicacion.jks"

@@ -1,0 +1,104 @@
+name: Pruebas de interfaz nocturnas
+
+# Pruebas de interfaz con Compose UI Test sobre un emulador. Van aparte del
+# pipeline de cada pull request porque levantar un emulador toma entre 8 y 12
+# minutos: en cada PR eso agotaría la cuota de minutos del repositorio y
+# volvería lenta la revisión. Equivale al `e2e-nocturno.yml` del cliente web.
+#
+# Las ejecuciones programadas solo corren desde la rama predeterminada del
+# repositorio. Si el archivo vive únicamente en una rama de historia, no se
+# dispara: hay que tenerlo en develop.
+
+on:
+  schedule:
+    # 04:23 UTC = 23:23 en Bogotá del día anterior.
+    #
+    # La hora programada es una intención, no una promesa: GitHub encola las
+    # ejecuciones programadas y las sirve cuando hay capacidad. Con el cron
+    # anterior —07:00 UTC, en punto— los retrasos medidos fueron de entre 4 y
+    # 9 horas, así que la supuesta corrida de las 02:00 de Bogotá caía entre
+    # las 06:14 y las 11:15, en plena jornada.
+    #
+    # Dos medidas contra eso: un minuto que no sea el 00, porque en punto es
+    # cuando más carga tiene el planificador, y una hora lo bastante temprana
+    # para que incluso con el retraso peor observado el resultado esté listo
+    # antes de que alguien empiece a trabajar.
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: pruebas-interfaz-nocturnas-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  instrumentadas:
+    name: Compose UI Test sobre emulador
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Código fuente
+        uses: actions/checkout@v7
+
+      - name: JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # Sin aceleración por hardware el emulador tarda tanto que el trabajo
+      # expira. El agente de Ubuntu tiene KVM pero no se lo da al usuario
+      # que ejecuta el workflow.
+      - name: Habilitar KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Pruebas instrumentadas
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated
+          # El idioma del emulador se fija a propósito. Compose nombra el velo
+          # de la hoja inferior según el idioma del dispositivo («Close sheet»
+          # o «Cerrar hoja»), y la aplicación resuelve `values/` o `values-en`
+          # por lo mismo: si la imagen del sistema cambiara de idioma, las
+          # pruebas cambiarían de resultado sin que nadie tocara el código.
+          # Se elige es-CO porque es el idioma por omisión de la aplicación.
+          script: |
+            adb root
+            adb shell stop
+            adb shell setprop persist.sys.locale es-CO
+            adb shell start
+            adb wait-for-device
+            timeout 300 adb shell 'while [ "$(getprop sys.boot_completed)" != "1" ]; do sleep 2; done'
+            # Reiniciar el marco de trabajo puede devolver las animaciones, y
+            # con animaciones las pruebas de Compose se quedan esperando.
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            idioma=$(adb shell getprop persist.sys.locale | tr -d "[:space:]")
+            echo "Idioma del emulador: $idioma"
+            if [ "$idioma" != "es-CO" ]; then
+              echo "::error::El emulador quedó en '$idioma' en vez de es-CO; las pruebas de interfaz comparan textos y darían un resultado que no corresponde."
+              exit 1
+            fi
+            ./gradlew :app:connectedDebugAndroidTest
+
+      - name: Reporte de las instrumentadas
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: instrumentadas
+          path: |
+            app/build/reports/androidTests/connected/
+            app/build/outputs/androidTest-results/connected/
+          if-no-files-found: ignore

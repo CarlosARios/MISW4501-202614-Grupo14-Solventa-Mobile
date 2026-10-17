@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Captura del documento de identidad en el registro (HU-M1.1-01) y,
+         más adelante, de la evidencia del siniestro (HU-M2.1-01). Se pide en
+         caliente: hasta que el usuario llegue a la captura, la aplicación
+         funciona sin ella. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- No se exige cámara para instalar: un dispositivo sin ella puede usar
+         el resto de la aplicación, y el emulador de las pruebas nocturnas no
+         siempre la tiene. -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
     <application
         android:name=".SolventaApp"
         android:allowBackup="true"

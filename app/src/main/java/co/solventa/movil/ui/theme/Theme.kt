@@ -1,58 +1,57 @@
 package co.solventa.movil.ui.theme
 
-import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+/**
+ * El prototipo tiene un solo modo, `Claro`. Por eso aquí no hay esquema
+ * oscuro ni color dinámico de Material You: una pantalla en modo oscuro
+ * perdería el contraste AA que se verificó en el diseño, y un color tomado
+ * del fondo de pantalla del usuario dejaría de ser la marca.
+ *
+ * Cuando el equipo diseñe el modo oscuro, se agrega un segundo modo a la
+ * colección de Figma y un `darkColorScheme` aquí, no antes.
+ */
+private val EsquemaClaro = lightColorScheme(
+    primary = Azul700,
+    onPrimary = TextoInverso,
+    primaryContainer = Azul100,
+    onPrimaryContainer = Azul900,
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    secondary = Azul500,
+    onSecondary = TextoInverso,
+    secondaryContainer = Azul50,
+    onSecondaryContainer = Azul900,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiary = Lima500,
+    onTertiary = TextoPrimario,
+
+    background = FondoPagina,
+    onBackground = TextoPrimario,
+    surface = FondoSuperficie,
+    onSurface = TextoPrimario,
+    surfaceVariant = Azul50,
+    onSurfaceVariant = TextoSecundario,
+
+    error = Error500,
+    onError = TextoInverso,
+    errorContainer = Error100,
+    onErrorContainer = Error600,
+
+    outline = BordeFuerte,
+    outlineVariant = BordeBase,
 )
 
 @Composable
-fun SolventaTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+fun SolventaTheme(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalColoresSolventa provides coloresSolventaClaro) {
+        MaterialTheme(
+            colorScheme = EsquemaClaro,
+            typography = Typography,
+            shapes = FormasSolventa,
+            content = content,
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }

@@ -1,49 +1,38 @@
 package co.solventa.movil
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
+import co.solventa.movil.core.auth.biometria.ProveedorDeActividad
 import co.solventa.movil.ui.theme.SolventaTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/**
+ * Extiende `FragmentActivity` y no `ComponentActivity` porque
+ * `BiometricPrompt` se monta como un fragmento y lo exige. `FragmentActivity`
+ * es una `ComponentActivity`, así que Compose funciona igual.
+ */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
+
+    @Inject
+    lateinit var actividades: ProveedorDeActividad
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actividades.registrar(this)
         enableEdgeToEdge()
         setContent {
             SolventaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                SolventaNavHost()
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SolventaTheme {
-        Greeting("Android")
+    override fun onDestroy() {
+        actividades.olvidar()
+        super.onDestroy()
     }
 }

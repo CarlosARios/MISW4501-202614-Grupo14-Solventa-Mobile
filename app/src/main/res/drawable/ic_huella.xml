@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Huella dactilar. Equivalente a fingerprint del prototipo (Lucide, trazo de 2).
+     El color lo pone Icon(tint = ...). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M12,10 A2,2 0 0 0 10,12 C10,13.02 9.9,14.51 9.74,16"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M14,13.12 C14,15.5 14,19.5 13,22"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M17.29,21.02 C17.41,20.42 17.72,18.72 17.79,18"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M2,12 A10,10 0 0 1 20,6"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M21.8,16 C22,14 21.93,10.65 21.8,10"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M5,19.5 C5.5,18 6,15 6,12 A6,6 0 0 1 6.34,10"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M8.65,22 C8.86,21.34 9.1,20.68 9.22,20"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M9,6.8 A6,6 0 0 1 18,12 L18,14"
+        android:strokeWidth="2"
+        android:strokeColor="#1B1F2A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

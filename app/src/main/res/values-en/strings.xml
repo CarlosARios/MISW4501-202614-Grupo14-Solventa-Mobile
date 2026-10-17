@@ -5,4 +5,151 @@
     El nombre de la aplicacion no se traduce.
 -->
 <resources>
+
+    <!-- Comunes -->
+    <string name="comun_atras">Back</string>
+    <string name="comun_continuar">Continue</string>
+    <string name="comun_entendido">Got it</string>
+    <string name="comun_contactar_soporte">Contact support</string>
+
+    <!-- M0 - welcome -->
+    <string name="bienvenida_titulo">Solventa</string>
+    <string name="bienvenida_lema">Your insurance, with you</string>
+    <string name="bienvenida_crear_cuenta">Create my account</string>
+    <string name="bienvenida_ya_tengo_cuenta">I already have an account</string>
+    <string name="pendiente_pantalla">Screen pending: %1$s</string>
+
+    <!-- M2a and M2c - sign in with device biometrics -->
+    <string name="ingreso_saludo">Hi, %1$s</string>
+    <string name="ingreso_biometria_instruccion">Confirm your identity with your device biometrics to continue.</string>
+    <string name="ingreso_biometria_toca">Touch the fingerprint sensor</string>
+    <string name="ingreso_biometria_descripcion">Fingerprint sensor</string>
+    <string name="ingreso_biometria_no_reconocida">Fingerprint not recognized</string>
+    <string name="ingreso_biometria_intento">Attempt %1$d of %2$d</string>
+    <string name="ingreso_biometria_reintentar">Try again</string>
+    <string name="ingreso_biometria_intenta_de_nuevo">We did not recognize your fingerprint. Place your finger properly on the sensor and try again.</string>
+    <string name="ingreso_biometria_pausada">We did not recognize your fingerprint. For security, biometrics is paused for this session: sign in with your password.</string>
+    <string name="ingreso_biometria_proximo">You will be able to use your fingerprint again next time you sign in.</string>
+    <string name="ingreso_biometria_usar_contrasena">Sign in with password</string>
+    <string name="ingreso_biometria_no_disponible">The system paused the sensor. Sign in with your password.</string>
+
+    <!-- Operating system dialog -->
+    <string name="ingreso_prompt_titulo">Solventa wants to verify your identity</string>
+    <string name="ingreso_prompt_detalle">Use your fingerprint or face to continue. Solventa does not store your biometric information: your device performs the check.</string>
+    <string name="ingreso_prompt_cancelar">Cancel</string>
+
+    <!-- M2b - sign in with email and password -->
+    <string name="ingreso_contrasena_titulo">Sign in</string>
+    <string name="ingreso_contrasena_por_eleccion">Sign in with your email and password. Your fingerprint is still available whenever you want to use it.</string>
+    <string name="ingreso_contrasena_introduccion">This device does not have biometrics enabled for Solventa, so use your email and password.</string>
+    <string name="ingreso_contrasena_correo">EMAIL ADDRESS</string>
+    <string name="ingreso_contrasena_clave">PASSWORD</string>
+    <string name="ingreso_contrasena_minimo">At least %1$d characters</string>
+    <string name="ingreso_contrasena_entrar">Sign in</string>
+    <string name="ingreso_contrasena_olvide">I forgot my password</string>
+    <string name="ingreso_contrasena_habilitar_biometria">Enable fingerprint or face on this device after signing in</string>
+    <string name="ingreso_contrasena_cierre_automatico">Your session closes automatically after 5 minutes of inactivity.</string>
+    <string name="ingreso_contrasena_crear_cuenta">Create my account</string>
+    <string name="ingreso_error_credenciales">We could not sign you in with that email and password. Check them and try again.</string>
+    <string name="ingreso_error_sin_conexion">No connection. Check your network and try again.</string>
+
+    <!-- M2d - session expired through inactivity -->
+    <string name="sesion_expirada_titulo">Your session expired</string>
+    <string name="sesion_expirada_detalle">For security we closed your session after 5 minutes of inactivity. Sign in again to continue where you left off.</string>
+    <string name="sesion_expirada_con_huella">Authenticate with fingerprint</string>
+    <string name="sesion_expirada_con_contrasena">Use my password</string>
+
+    <!-- M1a and M1b - document capture -->
+    <string name="registro_captura_titulo">Verify your identity</string>
+    <string name="registro_captura_paso">Step 1 of 3 · Identity document</string>
+    <string name="registro_captura_frente_instruccion">Take a photo of the front of your ID</string>
+    <string name="registro_captura_frente_etiqueta">FRONT</string>
+    <string name="registro_captura_frente_ayuda">Place the front of the document inside the frame and hold the phone steady</string>
+    <string name="registro_captura_reverso_instruccion">Take a photo of the back of your ID</string>
+    <string name="registro_captura_reverso_etiqueta">BACK</string>
+    <string name="registro_captura_reverso_ayuda">Now turn the document over and place the back inside the frame</string>
+    <string name="registro_captura_consejo_luz">Find good lighting</string>
+    <string name="registro_captura_consejo_reflejos">Avoid glare and shadows</string>
+    <string name="registro_captura_consejo_nitidez">Full document, in focus</string>
+    <string name="registro_captura_privacidad">We only capture the image of your document to verify your identity. It is not saved to your phone\'s gallery.</string>
+    <string name="registro_captura_accion">Capture</string>
+    <string name="registro_captura_problemas">I\'m having trouble capturing</string>
+    <string name="registro_captura_marco_descripcion">Guide frame for positioning the document</string>
+    <string name="registro_camara_permiso_titulo">We need the camera</string>
+    <string name="registro_camara_permiso_detalle">To photograph your document we have to use the phone camera. The image is not saved to your gallery.</string>
+    <string name="registro_camara_permiso_accion">Allow the camera</string>
+    <string name="registro_camara_negado_titulo">The camera is blocked</string>
+    <string name="registro_camara_negado_detalle">You denied the permission, so it has to be enabled from the phone settings: Apps · Solventa · Permissions · Camera.</string>
+    <string name="registro_camara_negado_accion">Open settings</string>
+    <string name="registro_camara_sin_camara">This phone does not have a camera we can use to capture the document.</string>
+    <string name="registro_camara_preparando">Getting the camera ready…</string>
+    <string name="registro_camara_poca_luz">There is not enough light: find a brighter spot before capturing</string>
+    <string name="registro_camara_vista_descripcion">Camera view with the frame to place the document</string>
+    <string name="registro_camara_error">We could not take the photo. Please try again.</string>
+
+    <!-- M1f - insufficient lighting, a state of M1a -->
+    <string name="registro_calidad_oscura_aviso">The image is too dark</string>
+    <string name="registro_calidad_oscura_titulo">We need more light</string>
+    <string name="registro_calidad_oscura_detalle">The image is too dark to read the document. Move closer to a window or turn on the room light; you can also use the phone\'s flash.</string>
+    <string name="registro_calidad_borrosa_aviso">The image is blurry</string>
+    <string name="registro_calidad_borrosa_titulo">The photo came out blurred</string>
+    <string name="registro_calidad_borrosa_detalle">Rest the phone on a surface or hold it with both hands, and try again without moving the document.</string>
+    <string name="registro_calidad_incompleta_aviso">The document is not fully visible</string>
+    <string name="registro_calidad_incompleta_titulo">Part of the document is missing</string>
+    <string name="registro_calidad_incompleta_detalle">Make sure all four corners of the document are inside the frame before capturing.</string>
+    <string name="registro_calidad_reintentar">Try again</string>
+
+    <!-- M1c - confirm the extracted data -->
+    <string name="registro_datos_titulo">Confirm your details</string>
+    <string name="registro_datos_paso">Step 2 of 3 · Personal details</string>
+    <string name="registro_datos_introduccion">We read these details from your document. Correct anything that does not match before continuing.</string>
+    <string name="registro_datos_nombres">First names</string>
+    <string name="registro_datos_apellidos">Last names</string>
+    <string name="registro_datos_documento">Document</string>
+    <string name="registro_datos_documento_ayuda">Read from the captured document</string>
+    <string name="registro_datos_nacimiento">Date of birth</string>
+    <string name="registro_datos_nacimiento_formato">MM/DD/YYYY</string>
+    <string name="registro_datos_correo">Email address</string>
+    <string name="registro_datos_celular">Mobile number</string>
+    <string name="registro_datos_celular_ayuda">You will receive a verification code by SMS</string>
+    <string name="registro_datos_terminos">I accept Solventa\'s terms of use and personal data processing policy.</string>
+    <string name="registro_datos_accion">Confirm and verify my identity</string>
+
+    <!-- M1g - verifying identity -->
+    <string name="registro_verificando_titulo">Verifying identity</string>
+    <string name="registro_verificacion_paso">Step 3 of 3 · Verification</string>
+    <string name="registro_verificando_encabezado">We are verifying your identity</string>
+    <string name="registro_verificando_detalle">This usually takes less than a minute. Please keep the app open.</string>
+    <string name="registro_verificando_documento">Identity document received and legible</string>
+    <string name="registro_verificando_prueba_vida">Liveness check in progress</string>
+    <string name="registro_verificando_listas">Restricted list screening pending</string>
+    <string name="registro_verificando_avisarme">Notify me instead</string>
+
+    <!-- M1d - verification successful -->
+    <string name="registro_exito_titulo">Verification complete</string>
+    <string name="registro_exito_encabezado">Identity verified</string>
+    <string name="registro_exito_detalle">Your account is now active. We will take you to the home screen in a few seconds.</string>
+    <string name="registro_exito_documento">Identity document legible and valid</string>
+    <string name="registro_exito_prueba_vida">Liveness check passed</string>
+    <string name="registro_exito_listas">No matches on restricted lists</string>
+    <string name="registro_exito_biometria">Use my fingerprint or face to sign in next time</string>
+    <string name="registro_exito_accion">Go to home</string>
+
+    <!-- M1e - verification not passed -->
+    <string name="registro_fallo_titulo">Verification</string>
+    <string name="registro_fallo_encabezado">We could not verify your identity</string>
+    <string name="registro_fallo_detalle">We were unable to validate your identity with the information captured. For security reasons we cannot share the details of this result. You can try again or contact our support team.</string>
+    <string name="registro_fallo_consejo_luz">Find a well-lit place without glare</string>
+    <string name="registro_fallo_consejo_documento">Use your original document, complete and without a sleeve</string>
+    <string name="registro_fallo_consejo_rostro">Look straight at the camera during the liveness check</string>
+    <string name="registro_fallo_referencia">Attempt reference: %1$s</string>
+    <string name="registro_fallo_accion">Try again</string>
+
+    <!-- M1h - verification is taking longer -->
+    <string name="registro_demora_titulo">Verification in progress</string>
+    <string name="registro_demora_encabezado">This is taking longer than usual</string>
+    <string name="registro_demora_detalle">You do not need to wait here. We will send you a notification with the result; it usually arrives within 10 minutes.</string>
+    <string name="registro_demora_documento">Identity document received and legible</string>
+    <string name="registro_demora_en_proceso">Identity verification in progress</string>
+    <string name="registro_demora_cuenta_inactiva">Your account will not be active until verification finishes</string>
 </resources>

@@ -6,4 +6,152 @@
 -->
 <resources>
     <string name="app_name" translatable="false">Solventa</string>
+
+    <!-- Comunes -->
+    <string name="comun_atras">Atrás</string>
+    <string name="comun_continuar">Continuar</string>
+    <string name="comun_entendido">Entendido</string>
+    <string name="comun_contactar_soporte">Contactar a soporte</string>
+
+    <!-- M0 · bienvenida. Pantalla de HU-M1.1-02; aquí solo lo necesario
+         para que el recorrido del registro tenga punto de entrada. -->
+    <string name="bienvenida_titulo">Solventa</string>
+    <string name="bienvenida_lema">Tu seguro, contigo</string>
+    <string name="bienvenida_crear_cuenta">Crear mi cuenta</string>
+    <string name="bienvenida_ya_tengo_cuenta">Ya tengo cuenta</string>
+    <string name="pendiente_pantalla">Pantalla pendiente: %1$s</string>
+
+    <!-- M2a y M2c · ingreso con la biometría del dispositivo -->
+    <string name="ingreso_saludo">Hola, %1$s</string>
+    <string name="ingreso_biometria_instruccion">Confirma tu identidad con la biometría de tu dispositivo para entrar.</string>
+    <string name="ingreso_biometria_toca">Toca el sensor de huella</string>
+    <string name="ingreso_biometria_descripcion">Sensor de huella</string>
+    <string name="ingreso_biometria_no_reconocida">Huella no reconocida</string>
+    <string name="ingreso_biometria_intento">Intento %1$d de %2$d</string>
+    <string name="ingreso_biometria_reintentar">Volver a intentar</string>
+    <string name="ingreso_biometria_intenta_de_nuevo">No reconocimos tu huella. Acomoda bien el dedo sobre el sensor y vuelve a intentarlo.</string>
+    <string name="ingreso_biometria_pausada">No reconocimos tu huella. Por seguridad, la biometría queda pausada para esta sesión: ingresa con tu contraseña.</string>
+    <string name="ingreso_biometria_proximo">Podrás volver a usar la huella en tu próximo ingreso.</string>
+    <string name="ingreso_biometria_usar_contrasena">Ingresar con contraseña</string>
+    <string name="ingreso_biometria_no_disponible">El sistema pausó el sensor. Ingresa con tu contraseña.</string>
+
+    <!-- Diálogo del sistema operativo. Los textos son nuestros; la ventana la pinta Android -->
+    <string name="ingreso_prompt_titulo">Solventa quiere verificar tu identidad</string>
+    <string name="ingreso_prompt_detalle">Usa tu huella o tu rostro para continuar. Solventa no almacena tu información biométrica: la validación la hace tu dispositivo.</string>
+    <string name="ingreso_prompt_cancelar">Cancelar</string>
+
+    <!-- M2b · ingreso con correo y contraseña -->
+    <string name="ingreso_contrasena_titulo">Inicia sesión</string>
+    <string name="ingreso_contrasena_por_eleccion">Ingresa con tu correo y tu contraseña. La huella sigue disponible cuando quieras usarla.</string>
+    <string name="ingreso_contrasena_introduccion">Este dispositivo no tiene biometría habilitada para Solventa, así que usa tu correo y contraseña.</string>
+    <string name="ingreso_contrasena_correo">CORREO ELECTRÓNICO</string>
+    <string name="ingreso_contrasena_clave">CONTRASEÑA</string>
+    <string name="ingreso_contrasena_minimo">Mínimo %1$d caracteres</string>
+    <string name="ingreso_contrasena_entrar">Entrar</string>
+    <string name="ingreso_contrasena_olvide">Olvidé mi contraseña</string>
+    <string name="ingreso_contrasena_habilitar_biometria">Habilitar la huella o el rostro en este dispositivo después de entrar</string>
+    <string name="ingreso_contrasena_cierre_automatico">Tu sesión se cierra automáticamente tras 5 minutos de inactividad.</string>
+    <string name="ingreso_contrasena_crear_cuenta">Crear mi cuenta</string>
+    <string name="ingreso_error_credenciales">No pudimos entrar con ese correo y esa contraseña. Revísalos e intenta de nuevo.</string>
+    <string name="ingreso_error_sin_conexion">No hay conexión. Revisa tu red e intenta de nuevo.</string>
+
+    <!-- M2d · sesión expirada por inactividad -->
+    <string name="sesion_expirada_titulo">Tu sesión expiró</string>
+    <string name="sesion_expirada_detalle">Por seguridad cerramos la sesión tras 5 minutos de inactividad. Vuelve a autenticarte para continuar donde estabas.</string>
+    <string name="sesion_expirada_con_huella">Autenticarme con huella</string>
+    <string name="sesion_expirada_con_contrasena">Usar mi contraseña</string>
+
+    <!-- M1a y M1b · captura del documento -->
+    <string name="registro_captura_titulo">Verifica tu identidad</string>
+    <string name="registro_captura_paso">Paso 1 de 3 · Documento de identidad</string>
+    <string name="registro_captura_frente_instruccion">Toma una foto del frente de tu cédula</string>
+    <string name="registro_captura_frente_etiqueta">FRENTE</string>
+    <string name="registro_captura_frente_ayuda">Ubica el frente del documento dentro del marco y mantén el teléfono quieto</string>
+    <string name="registro_captura_reverso_instruccion">Toma una foto del reverso de tu cédula</string>
+    <string name="registro_captura_reverso_etiqueta">REVERSO</string>
+    <string name="registro_captura_reverso_ayuda">Ahora gira el documento y ubica el reverso dentro del marco</string>
+    <string name="registro_captura_consejo_luz">Busca buena luz</string>
+    <string name="registro_captura_consejo_reflejos">Evita reflejos y sombras</string>
+    <string name="registro_captura_consejo_nitidez">Documento completo y nítido</string>
+    <string name="registro_captura_privacidad">Solo capturamos la imagen del documento para verificar tu identidad. No se guarda en la galería del teléfono.</string>
+    <string name="registro_captura_accion">Capturar</string>
+    <string name="registro_captura_problemas">Tengo problemas para capturar</string>
+    <string name="registro_captura_marco_descripcion">Marco guía para ubicar el documento</string>
+    <string name="registro_camara_permiso_titulo">Necesitamos la cámara</string>
+    <string name="registro_camara_permiso_detalle">Para fotografiar tu documento tenemos que usar la cámara del teléfono. La imagen no se guarda en tu galería.</string>
+    <string name="registro_camara_permiso_accion">Permitir la cámara</string>
+    <string name="registro_camara_negado_titulo">La cámara está bloqueada</string>
+    <string name="registro_camara_negado_detalle">Negaste el permiso, así que hay que activarlo desde los ajustes del teléfono: Aplicaciones · Solventa · Permisos · Cámara.</string>
+    <string name="registro_camara_negado_accion">Abrir los ajustes</string>
+    <string name="registro_camara_sin_camara">Este teléfono no tiene una cámara que podamos usar para capturar el documento.</string>
+    <string name="registro_camara_preparando">Preparando la cámara…</string>
+    <string name="registro_camara_poca_luz">Hay poca luz: busca un lugar más iluminado antes de capturar</string>
+    <string name="registro_camara_vista_descripcion">Vista de la cámara con el marco para ubicar el documento</string>
+    <string name="registro_camara_error">No pudimos tomar la foto. Inténtalo de nuevo.</string>
+
+    <!-- M1f · iluminación insuficiente, estado de M1a -->
+    <string name="registro_calidad_oscura_aviso">La imagen está muy oscura</string>
+    <string name="registro_calidad_oscura_titulo">Necesitamos más luz</string>
+    <string name="registro_calidad_oscura_detalle">La imagen está demasiado oscura para leer el documento. Acércate a una ventana o enciende la luz de la habitación; también puedes activar el flash del teléfono.</string>
+    <string name="registro_calidad_borrosa_aviso">La imagen está borrosa</string>
+    <string name="registro_calidad_borrosa_titulo">La foto salió movida</string>
+    <string name="registro_calidad_borrosa_detalle">Apoya el teléfono o sostenlo con las dos manos y vuelve a intentarlo sin mover el documento.</string>
+    <string name="registro_calidad_incompleta_aviso">El documento no se ve completo</string>
+    <string name="registro_calidad_incompleta_titulo">Falta parte del documento</string>
+    <string name="registro_calidad_incompleta_detalle">Asegúrate de que las cuatro esquinas del documento queden dentro del marco antes de capturar.</string>
+    <string name="registro_calidad_reintentar">Volver a intentar</string>
+
+    <!-- M1c · confirmación de los datos extraídos -->
+    <string name="registro_datos_titulo">Confirma tus datos</string>
+    <string name="registro_datos_paso">Paso 2 de 3 · Datos personales</string>
+    <string name="registro_datos_introduccion">Extrajimos estos datos de tu documento. Corrige lo que no coincida antes de continuar.</string>
+    <string name="registro_datos_nombres">Nombres</string>
+    <string name="registro_datos_apellidos">Apellidos</string>
+    <string name="registro_datos_documento">Documento</string>
+    <string name="registro_datos_documento_ayuda">Tomado del documento capturado</string>
+    <string name="registro_datos_nacimiento">Fecha de nacimiento</string>
+    <string name="registro_datos_nacimiento_formato">DD/MM/AAAA</string>
+    <string name="registro_datos_correo">Correo electrónico</string>
+    <string name="registro_datos_celular">Celular</string>
+    <string name="registro_datos_celular_ayuda">Recibirás un código de verificación por SMS</string>
+    <string name="registro_datos_terminos">Acepto los términos de uso y la política de tratamiento de datos personales de Solventa.</string>
+    <string name="registro_datos_accion">Confirmar y verificar mi identidad</string>
+
+    <!-- M1g · verificando identidad -->
+    <string name="registro_verificando_titulo">Verificando identidad</string>
+    <string name="registro_verificacion_paso">Paso 3 de 3 · Verificación</string>
+    <string name="registro_verificando_encabezado">Estamos verificando tu identidad</string>
+    <string name="registro_verificando_detalle">Esto suele tomar menos de un minuto. No cierres la aplicación.</string>
+    <string name="registro_verificando_documento">Documento de identidad recibido y legible</string>
+    <string name="registro_verificando_prueba_vida">Prueba de vida en proceso</string>
+    <string name="registro_verificando_listas">Consulta en listas restrictivas pendiente</string>
+    <string name="registro_verificando_avisarme">Avísame por notificación</string>
+
+    <!-- M1d · verificación exitosa -->
+    <string name="registro_exito_titulo">Verificación completada</string>
+    <string name="registro_exito_encabezado">¡Identidad verificada!</string>
+    <string name="registro_exito_detalle">Tu cuenta quedó activa. Te llevaremos al inicio de la aplicación en unos segundos.</string>
+    <string name="registro_exito_documento">Documento de identidad legible y válido</string>
+    <string name="registro_exito_prueba_vida">Prueba de vida superada</string>
+    <string name="registro_exito_listas">Sin coincidencias en listas restrictivas</string>
+    <string name="registro_exito_biometria">Usar mi huella o rostro para iniciar sesión la próxima vez</string>
+    <string name="registro_exito_accion">Ir al inicio</string>
+
+    <!-- M1e · verificación no superada -->
+    <string name="registro_fallo_titulo">Verificación</string>
+    <string name="registro_fallo_encabezado">No pudimos verificar tu identidad</string>
+    <string name="registro_fallo_detalle">No fue posible validar tu identidad con la información capturada. Por seguridad no podemos indicarte el detalle del resultado. Puedes intentarlo de nuevo o contactar a nuestro equipo de soporte.</string>
+    <string name="registro_fallo_consejo_luz">Busca un lugar con buena iluminación y sin reflejos</string>
+    <string name="registro_fallo_consejo_documento">Usa tu documento original, completo y sin fundas</string>
+    <string name="registro_fallo_consejo_rostro">Mira de frente a la cámara durante la prueba de vida</string>
+    <string name="registro_fallo_referencia">Referencia del intento: %1$s</string>
+    <string name="registro_fallo_accion">Intentar de nuevo</string>
+
+    <!-- M1h · la verificación tarda -->
+    <string name="registro_demora_titulo">Verificación en curso</string>
+    <string name="registro_demora_encabezado">Esto está tardando más de lo normal</string>
+    <string name="registro_demora_detalle">No necesitas esperar aquí. Te enviaremos una notificación con el resultado; normalmente llega en menos de 10 minutos.</string>
+    <string name="registro_demora_documento">Documento de identidad recibido y legible</string>
+    <string name="registro_demora_en_proceso">Verificación de identidad en proceso</string>
+    <string name="registro_demora_cuenta_inactiva">Tu cuenta no estará activa hasta que la verificación termine</string>
 </resources>

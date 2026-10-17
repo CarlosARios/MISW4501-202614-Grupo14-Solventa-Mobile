@@ -1,26 +1,27 @@
 # Flujo de trabajo del repositorio
 
-Las reglas son **las mismas del [cliente web](https://github.com/nicolasjaramillocely99/MISW4501-202614-Grupo14-Solventa-FrontWeb/blob/main/docs/flujo-de-trabajo.md)**. Lo que cambia aquí son las herramientas, no el proceso.
+Las reglas son las del equipo, fijadas en el [`AGENTS.md` del repositorio de servicios](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/blob/develop/AGENTS.md). Lo que cambia aquí son las herramientas, no el proceso.
 
 ## Ramas
 
 | Rama | Para qué | Cómo recibe cambios |
 |---|---|---|
 | `main` | Lo que está desplegado en producción (demo). Protegida. | Solo desde `develop`, por *pull request*, en cada entrega |
-| `develop` | Integración del sprint. Protegida. | Solo desde ramas de historia, por *pull request* |
-| `<ID de la historia>` | El trabajo de una historia: `HU-M1.1-01`, `HA-S01` | Quien tomó la historia |
-| `T1`…`T7` | La base técnica del sprint 1, que no son historias y no llevan puntos | Quien tomó la tarea |
+| `develop` | Integración del sprint. Protegida. | Solo desde ramas de trabajo, por *pull request* |
+| `feature/<ID>-<descripción>` | El trabajo de una historia: `feature/HU-M1.1-01-registro-kyc` | Quien tomó la historia |
+| `fix/<ID>-<descripción>` | Corrección sobre una historia ya integrada | Quien la toma |
+| `chore/<descripción>` | Trabajo sin historia: la base técnica T1–T7, mantenimiento | Quien la toma |
 
 Reglas:
 
-- Toda rama de trabajo se crea **desde `develop`** y vuelve a `develop` por *pull request*. Nunca desde `main`.
-- El nombre de la rama es **únicamente el ID de la historia**, sin prefijos ni nombre corto. El ID se toma del [plan por sprints](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Plan-de-trabajo-por-sprints) y la carpeta destino de [`pantallas.md`](pantallas.md).
+- Toda rama de trabajo se crea **desde `develop`** y vuelve a `develop` por *pull request*. Nunca desde `main`, salvo un *hotfix*.
+- El ID se toma del [plan por sprints](https://github.com/leonelparrales22/MISW4501-202614-Grupo14-Solventa/wiki/Plan-de-trabajo-por-sprints) y la carpeta destino de [`pantallas.md`](pantallas.md).
 - Nadie hace *push* directo a `develop` ni a `main`.
 
 ```bash
 git switch develop
 git pull
-git switch -c HU-M1.1-01
+git switch -c feature/HU-M1.1-02-ingreso-biometrico
 ```
 
 ## Commits
@@ -33,10 +34,24 @@ El alcance es el paquete de `features`, no la capa: `feat(acceso)`, no `feat(vie
 
 1. Actualizar la rama con `develop` antes de abrirlo.
 2. El *pull request* apunta a `develop`. Se diligencia la plantilla (`.github/PULL_REQUEST_TEMPLATE.md`): historia, pantallas de Figma y cómo probarlo.
-3. Revisión de al menos un compañero.
-4. Pipeline `CI · Cliente móvil` en verde: Android Lint, *build* de depuración y pruebas unitarias con cobertura ≥ 70 %.
-5. *Squash and merge* a `develop`; la rama de la historia se borra al integrar.
-6. Al cierre de cada sprint o entrega, `develop` se integra a `main` por *pull request*; eso es lo que se despliega a producción (demo).
+3. **El título del *pull request* es el mensaje del commit** tras el *squash*: Conventional Commits con el ID de la historia. Por ejemplo `feat(acceso): registro con verificación de identidad (HU-M1.1-01)`.
+4. Revisión de al menos un compañero. Nadie fusiona su propio *pull request* sin revisión.
+5. Pipeline `CI · Cliente móvil` en verde: Android Lint, *build* de depuración y pruebas unitarias con cobertura ≥ 70 %.
+6. Al fusionar se borra la rama de trabajo. `develop` y `main` no se borran: el *ruleset* lo impide.
+
+### Estrategia de fusión
+
+```
+feature/* · fix/* · chore/*  ──(PR, squash)──▶  develop  ──(PR, merge commit)──▶  main
+```
+
+| De → A | Estrategia | Por qué |
+|---|---|---|
+| `feature/*`, `fix/*`, `chore/*` → `develop` | **Squash** | Un commit limpio por historia, fácil de revertir; los intermedios no llegan a `develop` |
+| `develop` → `main` | **Merge commit**, nunca *squash* ni *rebase* | Conserva la historia de `develop` y evita que las dos ramas diverjan tras cada entrega |
+| *Hotfix* urgente | Rama desde `main` → *pull request* a `main` con **squash**, y después se devuelve el cambio a `develop` | Caso excepcional |
+
+Es la misma estrategia de los otros dos repositorios del proyecto.
 
 ## Definition of Done de una historia (cliente móvil)
 
@@ -55,9 +70,16 @@ El alcance es el paquete de `features`, no la capa: `feat(acceso)`, no `feat(vie
 
 | Workflow | Disparo | Qué corre |
 |---|---|---|
-| `ci.yml` | *pull request* hacia `develop` o `main`, y *push* a esas ramas | Android Lint → *build* de depuración → pruebas unitarias con Kover (umbral ≥ 70 %) |
-| Instrumentadas nocturnas | **Pendiente** | Espresso sobre emulador en GitHub Actions, equivalente al `e2e-nocturno.yml` del cliente web |
+| `ci.yml` | *pull request* hacia `develop` o `main`, y *push* a esas ramas | Android Lint → *build* de depuración → pruebas unitarias con Kover (umbral ≥ 70 %). En los *push* deja además el **APK instalable** como artefacto |
+| `pruebas-interfaz-nocturnas.yml` | Cada madrugada, y bajo demanda | Compose UI Test sobre un emulador con API 34, **fijado en es-CO** |
+| `publicar.yml` | Al empujar una etiqueta `v*.*.*` | Verifica, construye y publica un *Release* con el APK adjunto |
 | Dependabot | Semanal | Actualizaciones de Gradle y de las acciones de GitHub |
+
+Las ejecuciones programadas solo corren desde la **rama predeterminada** del repositorio: el archivo de las nocturnas tiene que estar en `develop` para que se dispare.
+
+La hora de un `cron` en GitHub Actions es una intención, no una promesa: las ejecuciones programadas se encolan y se sirven cuando hay capacidad. Entre el 12 y el 17 de octubre de 2026, con el cron puesto en las 07:00 UTC en punto, los retrasos medidos fueron de **entre 4 y 9 horas**, de modo que la supuesta corrida de las 02:00 de Bogotá caía entre las 06:14 y las 11:15, en plena jornada. Por eso el cron está ahora en un minuto que no es el 00 —en punto es cuando más carga tiene el planificador— y a una hora lo bastante temprana para que, incluso con el peor retraso observado, el resultado esté antes de que alguien empiece a trabajar. Si hiciera falta el resultado a una hora exacta, la única vía fiable es lanzarlo a mano con `workflow_dispatch`.
+
+El emulador de las nocturnas arranca con el idioma fijado en **es-CO**, el idioma por omisión de la aplicación. No es un capricho: las pruebas de interfaz comparan textos, y tanto los recursos de la aplicación (`values/` frente a `values-en/`) como las descripciones de accesibilidad de Compose cambian con el idioma del dispositivo. Sin fijarlo, una imagen de sistema distinta cambiaría el resultado sin que nadie hubiera tocado el código.
 
 ## Comandos de uso diario
 
